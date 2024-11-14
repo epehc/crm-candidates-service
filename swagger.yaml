@@ -1,0 +1,741 @@
+openapi: 3.0.0
+info:
+  title: CRM Candidates Service
+  description: API for managing candidate data.
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+    description: Local Development Server
+paths:
+  /candidatos:
+    get:
+      summary: Get all candidates
+      responses:
+        '200':
+          description: A list of candidates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Candidato'
+    post:
+      summary: Add a new candidate
+      responses:
+        '201':
+          description: Candidate created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidato'
+  /candidatos/{id}:
+    get:
+      summary: Get candidate by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Candidate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidato'
+    put:
+      summary: Update candidate by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidato'
+      responses:
+        '200':
+          description: Candidate updated
+    delete:
+      summary: Delete candidate by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Candidate deleted
+  /candidatos/email/{email}:
+    get:
+      summary: Get candidate by email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Candidate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidato'
+  /candidatos/dpi/{dpi}:
+    get:
+      summary: Get candidate by DPI
+      parameters:
+        - name: dpi
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Candidate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidato'
+  /contactos:
+    get:
+      summary: Get all contacts
+      responses:
+        '200':
+          description: A list of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contacto'
+    post:
+      summary: Add a new contact
+      responses:
+        '201':
+          description: Contact created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contacto'
+  /contactos/{id}:
+    get:
+      summary: Get contact by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Contact details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacto'
+    put:
+      summary: Update contact by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contacto'
+      responses:
+        '200':
+          description: Contact updated
+    delete:
+      summary: Delete contact by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Contact deleted
+  /contactos/candidato/{candidato_id}:
+    get:
+      summary: Get contacts by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Contact details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacto'
+  /estudios:
+    get:
+      summary: Get all studies
+      responses:
+        '200':
+          description: A list of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Estudio'
+    post:
+      summary: Add a new study
+      responses:
+        '201':
+          description: Study created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estudio'
+  /estudios/{id}:
+    get:
+      summary: Get study by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Study details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudio'
+    put:
+      summary: Update study by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estudio'
+      responses:
+        '200':
+          description: Study updated
+    delete:
+      summary: Delete study by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Study deleted
+  /estudios/candidato/{candidato_id}:
+    get:
+      summary: Get studies by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Study details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudio'
+  /experiencias-laborales:
+    get:
+      summary: Get all work experiences
+      responses:
+        '200':
+          description: A list of work experiences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExperienciaLaboral'
+    post:
+      summary: Add a new work experience
+      responses:
+        '201':
+          description: Work experience created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperienciaLaboral'
+  /experiencias-laborales/{id}:
+    get:
+      summary: Get work experience by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Work experience details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperienciaLaboral'
+    put:
+      summary: Update work experience by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperienciaLaboral'
+      responses:
+        '200':
+          description: Work experience updated
+    delete:
+      summary: Delete work experience by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Work experience deleted
+  /experiencias-laborales/candidato/{candidato_id}:
+    get:
+      summary: Get work experiences by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Work experience details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperienciaLaboral'
+  /informaciones-personales:
+    get:
+      summary: Get all personal information
+      responses:
+        '200':
+          description: A list of personal information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InformacionPersonal'
+    post:
+      summary: Add new personal information
+      responses:
+        '201':
+          description: Personal information created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InformacionPersonal'
+  /informaciones-personales/{id}:
+    get:
+      summary: Get personal information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Personal information details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformacionPersonal'
+    put:
+      summary: Update personal information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InformacionPersonal'
+      responses:
+        '200':
+          description: Personal information updated
+    delete:
+      summary: Delete personal information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Personal information deleted
+  /informaciones-personales/candidato/{candidato_id}:
+    get:
+      summary: Get personal information by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Personal information details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformacionPersonal'
+  /mobilidades:
+    get:
+      summary: Get all mobility information
+      responses:
+        '200':
+          description: A list of mobility information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mobilidad'
+    post:
+      summary: Add new mobility information
+      responses:
+        '201':
+          description: Mobility information created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mobilidad'
+  /mobilidades/{id}:
+    get:
+      summary: Get mobility information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Mobility information details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mobilidad'
+    put:
+      summary: Update mobility information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mobilidad'
+      responses:
+        '200':
+          description: Mobility information updated
+    delete:
+      summary: Delete mobility information by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Mobility information deleted
+  /mobilidades/candidato/{candidato_id}:
+    get:
+      summary: Get mobility information by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Mobility information details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mobilidad'
+  /residencias:
+    get:
+      summary: Get all residences
+      responses:
+        '200':
+          description: A list of residences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Residencia'
+    post:
+      summary: Add a new residence
+      responses:
+        '201':
+          description: Residence created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Residencia'
+  /residencias/{id}:
+    get:
+      summary: Get residence by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Residence details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Residencia'
+    put:
+      summary: Update residence by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Residencia'
+      responses:
+        '200':
+          description: Residence updated
+    delete:
+      summary: Delete residence by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Residence deleted
+  /residencias/candidato/{candidato_id}:
+    get:
+      summary: Get residences by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Residence details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Residencia'
+  /vicios:
+    get:
+      summary: Get all vices
+      responses:
+        '200':
+          description: A list of vices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vicio'
+    post:
+      summary: Add a new vice
+      responses:
+        '201':
+          description: Vice created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vicio'
+  /vicios/{id}:
+    get:
+      summary: Get vice by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vice details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vicio'
+    put:
+      summary: Update vice by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vicio'
+      responses:
+        '200':
+          description: Vice updated
+    delete:
+      summary: Delete vice by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Vice deleted
+  /vicios/candidato/{candidato_id}:
+    get:
+      summary: Get vices by candidate ID
+      parameters:
+        - name: candidato_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vice details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vicio'
+components:
+  schemas:
+    Candidato:
+      type: object
+      properties:
+        candidato_id:
+          type: string
+        nombre:
+          type: string
+        puesto_aplicado:
+          type: string
+    Contacto:
+      type: object
+      properties:
+        contacto_id:
+          type: string
+        nombre:
+          type: string
+        telefono:
+          type: string
+    Estudio:
+      type: object
+      properties:
+        estudio_id:
+          type: string
+        titulo:
+          type: string
+        institucion:
+          type: string
+    ExperienciaLaboral:
+      type: object
+      properties:
+        experiencia_id:
+          type: string
+        empresa:
+          type: string
+        puesto:
+          type: string
+    InformacionPersonal:
+      type: object
+      properties:
+        informacion_id:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+    Mobilidad:
+      type: object
+      properties:
+        mobilidad_id:
+          type: string
+        tipo:
+          type: string
+    Residencia:
+      type: object
+      properties:
+        residencia_id:
+          type: string
+        direccion:
+          type: string
+    Vicio:
+      type: object
+      properties:
+        vicio_id:
+          type: string
+        tipo:
+          type: string
