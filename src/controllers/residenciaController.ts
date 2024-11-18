@@ -1,6 +1,7 @@
 // controllers/residenciaController.ts
 import { Request, Response } from 'express';
 import Residencia from '../models/residencia';
+import {validationResult} from "express-validator";
 
 export const getAllResidencias = async (req: Request, res: Response) => {
   try {
@@ -26,6 +27,10 @@ export const getResidenciaByCandidatoId = async (req: Request, res: Response) =>
 };
 
 export const createResidencia = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const residencia = await Residencia.create(req.body);
     res.status(201).json(residencia);

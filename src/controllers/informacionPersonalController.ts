@@ -1,6 +1,7 @@
 // controllers/informacionPersonalController.ts
 import { Request, Response } from 'express';
 import InformacionPersonal from '../models/informacionPersonal';
+import {validationResult} from "express-validator";
 
 export const getAllInformacionesPersonales = async (req: Request, res: Response) => {
   try {
@@ -26,6 +27,10 @@ export const getInformacionPersonalByCandidatoId = async (req: Request, res: Res
 };
 
 export const createInformacionPersonal = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const informacionPersonal = await InformacionPersonal.create(req.body);
     res.status(201).json(informacionPersonal);

@@ -1,6 +1,7 @@
 // controllers/mobilidadController.ts
 import { Request, Response } from 'express';
 import Mobilidad from '../models/mobilidad';
+import {validationResult} from "express-validator";
 
 export const getAllMobilidades = async (req: Request, res: Response) => {
   try {
@@ -26,6 +27,10 @@ export const getMobilidadByCandidatoId = async (req: Request, res: Response) => 
 };
 
 export const createMobilidad = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const movilidad = await Mobilidad.create(req.body);
     res.status(201).json(movilidad);

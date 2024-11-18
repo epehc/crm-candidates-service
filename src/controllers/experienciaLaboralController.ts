@@ -1,6 +1,7 @@
 // controllers/experienciaLaboralController.ts
 import { Request, Response } from 'express';
 import ExperienciaLaboral from '../models/experienciaLaboral';
+import {validationResult} from "express-validator";
 
 export const getAllExperienciasLaborales = async (req: Request, res: Response) => {
   try {
@@ -36,6 +37,10 @@ export const getExperienciasLaboralesByCandidatoId = async (req: Request, res: R
 };
 
 export const createExperienciaLaboral = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const experienciaLaboral = await ExperienciaLaboral.create(req.body);
     res.status(201).json(experienciaLaboral);

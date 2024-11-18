@@ -1,6 +1,7 @@
 // controllers/candidatoController.ts
 import { Request, Response } from 'express';
 import Candidato from '../models/candidato';
+import {validationResult} from "express-validator";
 
 export const getAllCandidatos = async (req: Request, res: Response) => {
   try {
@@ -54,11 +55,15 @@ export const getCandidatoByDPI = async (req: Request, res: Response) => {
 };
 
 export const createCandidato = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+  }
   try {
-    const candidato = await Candidato.create(req.body);
-    res.status(201).json(candidato);
+      const candidato = await Candidato.create(req.body);
+      res.status(201).json(candidato);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create candidato' });
+      res.status(500).json({ error: 'Failed to create candidato' });
   }
 };
 
