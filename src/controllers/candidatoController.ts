@@ -1,12 +1,13 @@
-// controllers/candidatoController.ts
 import { Request, Response } from 'express';
 import Candidato from '../models/candidato';
 import {validationResult} from "express-validator";
+import logger from "../utils/logger";
 
 export const getAllCandidatos = async (req: Request, res: Response) => {
   try {
     const candidatos = await Candidato.findAll();
-    res.json(candidatos);
+    logger.info("Candidatos cargados")
+    res.status(200).json(candidatos);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch candidatos' });
   }
@@ -17,7 +18,8 @@ export const getCandidatoByCandidatoId = async (req: Request, res: Response) => 
     const { candidato_id } = req.params;
     const candidato = await Candidato.findByPk(candidato_id);
     if (candidato) {
-      res.json(candidato);
+        logger.info(`Candidato con candidato_id: ${candidato_id} cargado.`)
+      res.status(200).json(candidato);
     } else {
       res.status(404).json({ error: 'Candidato not found' });
     }
@@ -31,7 +33,8 @@ export const getCandidatoByEmail = async (req: Request, res: Response) => {
         const { email } = req.params;
         const candidato = await Candidato.findOne({ where: { email } });
         if (candidato) {
-            res.json(candidato);
+            logger.info(`Candidato con email: ${email} cargado.`)
+            res.status(200).json(candidato);
         } else {
             res.status(404).json({ error: 'Candidato not found' });
         }
@@ -45,7 +48,8 @@ export const getCandidatoByDPI = async (req: Request, res: Response) => {
         const { dpi } = req.params;
         const candidato = await Candidato.findOne({ where: { dpi } });
         if (candidato) {
-            res.json(candidato);
+            logger.info(`Candidato con dpi: ${dpi} cargado.`)
+            res.status(200).json(candidato);
         } else {
             res.status(404).json({ error: 'Candidato not found' });
         }
@@ -54,13 +58,14 @@ export const getCandidatoByDPI = async (req: Request, res: Response) => {
     }
 };
 
-export const createCandidato = async (req: Request, res: Response) => {
+export const createCandidato = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
   }
   try {
       const candidato = await Candidato.create(req.body);
+      logger.info("Candidato creadi")
       res.status(201).json(candidato);
   } catch (error) {
       res.status(500).json({ error: 'Failed to create candidato' });
@@ -73,7 +78,8 @@ export const updateCandidato = async (req: Request, res: Response) => {
     const [updated] = await Candidato.update(req.body, { where: { id } });
     if (updated) {
       const updatedCandidato = await Candidato.findByPk(id);
-      res.json(updatedCandidato);
+        logger.info("Candidato actualizado")
+        res.status(200).json(updatedCandidato);
     } else {
       res.status(404).json({ error: 'Candidato not found' });
     }
@@ -87,6 +93,7 @@ export const deleteCandidato = async (req: Request, res: Response) => {
     const { id } = req.params;
     const deleted = await Candidato.destroy({ where: { id } });
     if (deleted) {
+        logger.info("Candidato eliminado")
       res.status(204).send();
     } else {
       res.status(404).json({ error: 'Candidato not found' });
