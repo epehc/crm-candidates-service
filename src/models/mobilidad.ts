@@ -16,15 +16,15 @@ Mobilidad.init(
         },
         licencia_tipo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         licencia_fecha_expiracion: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         tiempo_conduciendo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         vehiculo: {
             type: DataTypes.STRING,
@@ -32,11 +32,11 @@ Mobilidad.init(
         },
         vehiculo_tipo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         vehiculo_modelo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         viaje_interior: {
             type: DataTypes.STRING,

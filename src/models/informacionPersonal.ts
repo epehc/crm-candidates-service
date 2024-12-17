@@ -20,7 +20,7 @@ InformacionPersonal.init(
         },
         estado_civil: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         religion: {
             type: DataTypes.STRING,
@@ -28,19 +28,19 @@ InformacionPersonal.init(
         },
         software: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         partido_politico: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         sindicato: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         adjetivos: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         impedimento_fisico: {
             type: DataTypes.STRING,
@@ -48,7 +48,7 @@ InformacionPersonal.init(
         },
         enfermedad: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         nivel_estudios: {
             type: DataTypes.STRING,
@@ -56,15 +56,15 @@ InformacionPersonal.init(
         },
         estudios_adicionales: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         idiomas: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         personas_dependientes: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         fecha_nacimiento: {
             type: DataTypes.STRING,
