@@ -21,9 +21,9 @@ router.post(
       body('id').isUUID(),
       body('candidato_id').isUUID(),
       body('parentezco').isString(),
-      body('nombre').isString(),
-      body('trabajo').isString(),
-      body('telefono').isString(),
+      body('nombre').isString().notEmpty().withMessage('Nombre es requerido'),
+      body('trabajo').isString().notEmpty().withMessage('Trabajo es requerido'),
+      body('telefono').isString().notEmpty().withMessage('Telefono es requerido'),
     ],
     createContacto
 );
@@ -31,10 +31,10 @@ router.put(
     '/:id',
     [
       param('id').isUUID(),
-      body('parentezco').optional().isEmail(),
-      body('nombre').optional().isString(),
-      body('trabajo').optional().isString(),
-      body('telefono').optional().isString(),
+    body('parentezco').optional().isString(),
+    body('nombre').optional().isString().notEmpty().withMessage('Nombre es requerido'),
+    body('trabajo').optional().isString().notEmpty().withMessage('Trabajo es requerido'),
+    body('telefono').optional().isString().notEmpty().withMessage('Telefono es requerido'),
     ],
     updateContacto
 );

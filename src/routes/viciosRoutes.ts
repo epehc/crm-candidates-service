@@ -15,19 +15,24 @@ router.get('/:id', param('id').isUUID(), getViciosByCandidatoId);
 router.post(
   '/',
   [
-    body('vicio_id').isUUID(),
     body('candidato_id').isUUID(),
-    body('tipo').isString(),
-    body('frecuencia').isString(),
+    body('fuma').isString().notEmpty().withMessage('Fuma es requerido'),
+    body('alcohol').isString().notEmpty().withMessage('Alcohol es requerido'),
+    body('alcohol_frecuencia').isString().notEmpty().withMessage('Frecuencia de alcohol es requerido'),
+    body('drogas').isString().notEmpty().withMessage('Drogas es requerido'),
+    body('tatuajes').isString().notEmpty().withMessage('Tatuajes es requerido'),
   ],
   createVicios
 );
 router.put(
   '/:id',
   [
-    param('id').isUUID(),
-    body('tipo').optional().isString(),
-    body('frecuencia').optional().isString(),
+    param('candidato_id').isUUID(),
+    body('fuma').optional().isString().notEmpty().withMessage('Fuma es requerido'),
+    body('alcohol').optional().isString().notEmpty().withMessage('Alcohol es requerido'),
+    body('alcohol_frecuencia').optional().isString().notEmpty().withMessage('Frecuencia de alcohol es requerido'),
+    body('drogas').optional().isString().notEmpty().withMessage('Drogas es requerido'),
+    body('tatuajes').optional().isString().notEmpty().withMessage('Tatuajes es requerido'),
   ],
   updateVicios
 );

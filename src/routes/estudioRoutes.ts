@@ -19,9 +19,9 @@ router.post(
   [
     body('id').isUUID(),
     body('candidato_id').isUUID(),
-    body('institucion').isString(),
-    body('titulo').isString(),
-    body('grado').isString(),
+    body('institucion').isString().notEmpty().withMessage('Institucion es requerido'),
+    body('titulo').isString().notEmpty().withMessage('Titulo es requerido'),
+    body('grado').isString().notEmpty().withMessage('Grado es requerido'),
   ],
   createEstudio
 );
@@ -29,9 +29,10 @@ router.put(
   '/:id',
   [
     param('id').isUUID(),
-    body('institucion').optional().isString(),
-    body('titulo').optional().isString(),
-    body('grado').optional().isString(),
+    body('candidato_id').isUUID(),
+    body('institucion').optional().isString().notEmpty().withMessage('Institucion es requerido'),
+    body('titulo').optional().isString().notEmpty().withMessage('Titulo es requerido'),
+    body('grado').optional().isString().notEmpty().withMessage('Grado es requerido'),
   ],
   updateEstudio
 );
