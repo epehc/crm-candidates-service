@@ -10,8 +10,82 @@ import {
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: InformacionesPersonales
+ *   description: API for managing informaciones personales
+ */
+
+/**
+ * @swagger
+ * /informaciones-personales:
+ *   get:
+ *     summary: Retrieve a list of informaciones personales
+ *     tags: [InformacionesPersonales]
+ *     responses:
+ *       200:
+ *         description: A list of informaciones personales
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/InformacionPersonal'
+ *       500:
+ *         description: Failed to fetch informaciones personales
+ */
 router.get('/', getAllInformacionesPersonales);
+
+/**
+ * @swagger
+ * /informaciones-personales/{id}:
+ *   get:
+ *     summary: Get a informacion personal by candidato ID
+ *     tags: [InformacionesPersonales]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     responses:
+ *       200:
+ *         description: The informacion personal description by candidato ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InformacionPersonal'
+ *       404:
+ *         description: Informacion personal not found
+ *       500:
+ *         description: Failed to fetch informacion personal
+ */
 router.get('/:id', param('id').isUUID(), getInformacionPersonalByCandidatoId);
+
+/**
+ * @swagger
+ * /informaciones-personales:
+ *   post:
+ *     summary: Create a new informacion personal
+ *     tags: [InformacionesPersonales]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/InformacionPersonal'
+ *     responses:
+ *       201:
+ *         description: The informacion personal was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InformacionPersonal'
+ *       500:
+ *         description: Failed to create informacion personal
+ */
 router.post(
   '/',
   [
@@ -35,6 +109,36 @@ router.post(
 ],
   createInformacionPersonal
 );
+
+/**
+ * @swagger
+ * /informaciones-personales/{id}:
+ *   put:
+ *     summary: Update a informacion personal
+ *     tags: [InformacionesPersonales]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/InformacionPersonal'
+ *     responses:
+ *       200:
+ *         description: The informacion personal was successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InformacionPersonal'
+ *       500:
+ *         description: Failed to update informacion personal
+ */
 router.put(
   '/:id',
   [
@@ -58,6 +162,26 @@ router.put(
   ],
   updateInformacionPersonal
 );
+
+/**
+ * @swagger
+ * /informaciones-personales/{id}:
+ *   delete:
+ *     summary: Delete a informacion personal
+ *     tags: [InformacionesPersonales]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     responses:
+ *       200:
+ *         description: The informacion personal was successfully deleted
+ *       500:
+ *         description: Failed to delete informacion personal
+ */
 router.delete('/:id', param('id').isUUID(), deleteInformacionPersonal);
 
 export default router;

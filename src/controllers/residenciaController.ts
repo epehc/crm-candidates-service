@@ -4,6 +4,70 @@ import Residencia from '../models/residencia';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Residencia:
+ *       type: object
+ *       required:
+ *         - candidato_id
+ *         - vive_con
+ *         - calle
+ *         - zona
+ *         - municipio
+ *         - departamento
+ *         - pais_de_residencia
+ *       properties:
+ *         candidato_id:
+ *           type: string
+ *           description: The ID of the candidato
+ *         vive_con:
+ *           type: string
+ *           description: Who the candidato lives with
+ *         calle:
+ *           type: string
+ *           description: The street of the residencia
+ *         zona:
+ *           type: string
+ *           description: The zone of the residencia
+ *         municipio:
+ *           type: string
+ *           description: The municipality of the residencia
+ *         departamento:
+ *           type: string
+ *           description: The department of the residencia
+ *         pais_de_residencia:
+ *           type: string
+ *           description: The country of the residencia
+ *       example:
+ *         candidato_id: d5fE_asz
+ *         vive_con: Familia
+ *         calle: 5ta Avenida
+ *         zona: 10
+ *         municipio: Guatemala
+ *         departamento: Guatemala
+ *         pais_de_residencia: Guatemala
+ */
+
+/**
+ * @swagger
+ * /residencias:
+ *   get:
+ *     summary: Retrieve a list of residencias
+ *     tags: [Residencias]
+ *     responses:
+ *       200:
+ *         description: A list of residencias
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Residencia'
+ *       500:
+ *         description: Failed to fetch residencias
+ */
 export const getAllResidencias = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -20,6 +84,31 @@ export const getAllResidencias = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /residencias/{candidato_id}:
+ *   get:
+ *     summary: Retrieve a single residencia
+ *     tags: [Residencias]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single residencia
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Residencia'
+ *       404:
+ *         description: Residencia not found
+ *       500:
+ *         description: Failed to fetch residencia
+ */
 export const getResidenciaByCandidatoId = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -42,6 +131,28 @@ export const getResidenciaByCandidatoId = async (req: Request, res: Response) =>
   }
 };
 
+/**
+ * @swagger
+ * /residencias:
+ *   post:
+ *     summary: Create a new residencia
+ *     tags: [Residencias]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Residencia'
+ *     responses:
+ *       201:
+ *         description: Residencia created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Residencia'
+ *       500:
+ *         description: Failed to create residencia
+ */
 export const createResidencia = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -58,6 +169,37 @@ export const createResidencia = async (req: Request, res: Response): Promise<voi
   }
 };
 
+/**
+ * @swagger
+ * /residencias/{candidato_id}:
+ *   put:
+ *     summary: Update a residencia
+ *     tags: [Residencias]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Residencia'
+ *     responses:
+ *       200:
+ *         description: Residencia updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Residencia'
+ *       404:
+ *         description: Residencia not found
+ *       500:
+ *         description: Failed to update residencia
+ */
 export const updateResidencia = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -81,6 +223,27 @@ export const updateResidencia = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /residencias/{candidato_id}:
+ *   delete:
+ *     summary: Remove a residencia
+ *     tags: [Residencias]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Residencia deleted
+ *       404:
+ *         description: Residencia not found
+ *       500:
+ *         description: Failed to delete residencia
+ */
 export const deleteResidencia = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

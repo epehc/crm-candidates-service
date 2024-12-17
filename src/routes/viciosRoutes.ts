@@ -10,8 +10,84 @@ import {
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Vicios
+ *   description: API for managing vicios
+ */
+
+/**
+ * @swagger
+ * /vicios:
+ *   get:
+ *     summary: Retrieve a list of vicios
+ *     tags: [Vicios]
+ *     responses:
+ *       200:
+ *         description: A list of vicios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Vicios'
+ *       500:
+ *         description: Failed to fetch vicios
+ */
 router.get('/', getAllVicios);
+
+/**
+ * @swagger
+ * /vicios/{candidato_id}:
+ *   get:
+ *     summary: Retrieve a single vicios
+ *     tags: [Vicios]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single vicios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vicios'
+ *       404:
+ *         description: Vicios not found
+ *       500:
+ *         description: Failed to fetch vicios
+ */
 router.get('/:id', param('id').isUUID(), getViciosByCandidatoId);
+
+/**
+ * @swagger
+ * /vicios:
+ *   post:
+ *     summary: Create new vicios
+ *     tags: [Vicios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Vicios'
+ *     responses:
+ *       201:
+ *         description: The vicios were successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vicios'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Failed to create vicios
+ */
 router.post(
   '/',
   [
@@ -24,6 +100,40 @@ router.post(
   ],
   createVicios
 );
+
+/**
+ * @swagger
+ * /vicios/{candidato_id}:
+ *   put:
+ *     summary: Update an existing vicios
+ *     tags: [Vicios]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Vicios'
+ *     responses:
+ *       200:
+ *         description: Vicios updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vicios'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Vicios not found
+ *       500:
+ *         description: Failed to update vicios
+ */
 router.put(
   '/:id',
   [
@@ -36,6 +146,28 @@ router.put(
   ],
   updateVicios
 );
+
+/**
+ * @swagger
+ * /vicios/{candidato_id}:
+ *   delete:
+ *     summary: Delete an existing vicios
+ *     tags: [Vicios]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         required: true
+ *         description: ID of the candidato
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Vicios deleted
+ *       404:
+ *         description: Vicios not found
+ *       500:
+ *         description: Failed to delete vicios
+ */
 router.delete('/:id', param('id').isUUID(), deleteVicios);
 
 export default router;

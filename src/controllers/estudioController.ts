@@ -4,6 +4,60 @@ import Estudio from '../models/estudio';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Estudio:
+ *       type: object
+ *       required:
+ *         - id
+ *         - candidato_id
+ *         - institucion
+ *         - titulo
+ *         - grado
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the estudio
+ *         candidato_id:
+ *           type: string
+ *           description: The id of the candidato
+ *         institucion:
+ *           type: string
+ *           description: The institution of the estudio
+ *         titulo:
+ *           type: string
+ *           description: The title of the estudio
+ *         grado:
+ *           type: string
+ *           description: The grade of the estudio
+ *       example:
+ *         id: d5fE_asz
+ *         candidato_id: c3fE_asz
+ *         institucion: Universidad XYZ
+ *         titulo: Ingenieria en Sistemas
+ *         grado: Licenciatura
+ */
+
+/**
+ * @swagger
+ * /estudios:
+ *   get:
+ *     summary: Retrieve a list of estudios
+ *     tags: [Estudios]
+ *     responses:
+ *       200:
+ *         description: A list of estudios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Estudio'
+ *       500:
+ *         description: Failed to fetch estudios
+ */
 export const getAllEstudios = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -20,6 +74,31 @@ export const getAllEstudios = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /estudios/{id}:
+ *   get:
+ *     summary: Get a estudio by ID
+ *     tags: [Estudios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The estudio ID
+ *     responses:
+ *       200:
+ *         description: The estudio description by ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Estudio'
+ *       404:
+ *         description: Estudio not found
+ *       500:
+ *         description: Failed to fetch estudio
+ */
 export const getEstudioById = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -42,6 +121,33 @@ export const getEstudioById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /estudios/candidato/{candidato_id}:
+ *   get:
+ *     summary: Get estudios by candidato ID
+ *     tags: [Estudios]
+ *     parameters:
+ *       - in: path
+ *         name: candidato_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     responses:
+ *       200:
+ *         description: The estudios description by candidato ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Estudio'
+ *       404:
+ *         description: Estudios not found
+ *       500:
+ *         description: Failed to fetch estudios
+ */
 export const getEstudiosByCandidatoId = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -59,6 +165,30 @@ export const getEstudiosByCandidatoId = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /estudios:
+ *   post:
+ *     summary: Create a new estudio
+ *     tags: [Estudios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Estudio'
+ *     responses:
+ *       201:
+ *         description: The estudio was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Estudio'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Failed to create estudio
+ */
 export const createEstudio = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -75,6 +205,39 @@ export const createEstudio = async (req: Request, res: Response): Promise<void> 
   }
 };
 
+/**
+ * @swagger
+ * /estudios/{id}:
+ *   put:
+ *     summary: Update an existing estudio
+ *     tags: [Estudios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The estudio ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Estudio'
+ *     responses:
+ *       200:
+ *         description: The estudio was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Estudio'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Estudio not found
+ *       500:
+ *         description: Failed to update estudio
+ */
 export const updateEstudio = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -98,6 +261,27 @@ export const updateEstudio = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /estudios/{id}:
+ *   delete:
+ *     summary: Remove an estudio
+ *     tags: [Estudios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The estudio ID
+ *     responses:
+ *       204:
+ *         description: The estudio was deleted
+ *       404:
+ *         description: Estudio not found
+ *       500:
+ *         description: Failed to delete estudio
+ */
 export const deleteEstudio = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

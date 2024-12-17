@@ -12,10 +12,137 @@ import {
 
 const router = express.Router();
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Candidatos
+ *   description: API for managing candidatos
+ */
+
+/**
+ * @swagger
+ * /candidatos:
+ *   get:
+ *     summary: Retrieve a list of candidatos
+ *     tags: [Candidatos]
+ *     responses:
+ *       200:
+ *         description: A list of candidatos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Candidato'
+ *       500:
+ *         description: Failed to fetch candidatos
+ */
 router.get('/', getAllCandidatos);
+
+/**
+ * @swagger
+ * /candidatos/{id}:
+ *   get:
+ *     summary: Get a candidato by ID
+ *     tags: [Candidatos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     responses:
+ *       200:
+ *         description: The candidato description by ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Candidato'
+ *       404:
+ *         description: Candidato not found
+ *       500:
+ *         description: Failed to fetch candidato
+ */
 router.get('/:id', getCandidatoByCandidatoId);
+
+/**
+ * @swagger
+ * /candidatos/email/{email}:
+ *   get:
+ *     summary: Get a candidato by email
+ *     tags: [Candidatos]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato email
+ *     responses:
+ *       200:
+ *         description: The candidato description by email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Candidato'
+ *       404:
+ *         description: Candidato not found
+ *       500:
+ *         description: Failed to fetch candidato
+ */
 router.get('/email/:email', getCandidatoByEmail);
+
+/**
+ * @swagger
+ * /candidatos/dpi/{dpi}:
+ *   get:
+ *     summary: Get a candidato by DPI
+ *     tags: [Candidatos]
+ *     parameters:
+ *       - in: path
+ *         name: dpi
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato DPI
+ *     responses:
+ *       200:
+ *         description: The candidato description by DPI
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Candidato'
+ *       404:
+ *         description: Candidato not found
+ *       500:
+ *         description: Failed to fetch candidato
+ */
 router.get('/dpi/:dpi', getCandidatoByDPI);
+
+/**
+ * @swagger
+ * /candidatos:
+ *   post:
+ *     summary: Create a new candidato
+ *     tags: [Candidatos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Candidato'
+ *     responses:
+ *       201:
+ *         description: Candidato created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Candidato'
+ *       500:
+ *         description: Failed to create candidato
+ */
 router.post(
     '/',
     [
@@ -32,6 +159,38 @@ router.post(
     ],
     createCandidato
 );
+
+/**
+ * @swagger
+ * /candidatos/{id}:
+ *   put:
+ *     summary: Update a candidato
+ *     tags: [Candidatos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Candidato'
+ *     responses:
+ *       200:
+ *         description: Candidato updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Candidato'
+ *       404:
+ *         description: Candidato not found
+ *       500:
+ *         description: Failed to update candidato
+ */
 router.put(
     '/:id',
     [
@@ -47,6 +206,28 @@ router.put(
     ],
     updateCandidato
 );
+
+/**
+ * @swagger
+ * /candidatos/{id}:
+ *   delete:
+ *     summary: Delete a candidato
+ *     tags: [Candidatos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The candidato ID
+ *     responses:
+ *       200:
+ *         description: Candidato deleted
+ *       404:
+ *         description: Candidato not found
+ *       500:
+ *         description: Failed to delete candidato
+ */
 router.delete('/:id', deleteCandidato);
 
 export default router;
