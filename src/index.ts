@@ -9,11 +9,12 @@ import informacionPersonalRoutes from "./routes/informacionPersonalRoutes";
 import mobilidadRoutes from "./routes/mobilidadRoutes";
 import residenciaRoutes from "./routes/residenciaRoutes";
 import viciosRoutes from "./routes/viciosRoutes";
-
+import {setupSwagger} from './utils/swagger';
 
 const app = express();
 
 app.use(bodyParser.json());
+setupSwagger(app);
 app.use("/candidatos", candidatoRoutes);
 app.use("/contactos", contactoRoutes);
 app.use("/estudios", estudioRoutes);
@@ -25,6 +26,9 @@ app.use("/vicios", viciosRoutes)
 
 const PORT = 4000;
 
+/**
+ * Connects to the database and starts the server.
+ */
 sequelize
     .sync()
     .then(() => {

@@ -1,6 +1,32 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Vicios:
+ *       type: object
+ *       properties:
+ *         candidato_id:
+ *           type: string
+ *           description: The unique identifier for a candidato
+ *         fuma:
+ *           type: string
+ *           description: Indicates if the candidato smokes
+ *         alcohol:
+ *           type: string
+ *           description: Indicates if the candidato consumes alcohol
+ *         alcohol_frecuencia:
+ *           type: string
+ *           description: The frequency of alcohol consumption
+ *         drogas:
+ *           type: string
+ *           description: Indicates if the candidato uses drugs
+ *         tatuajes:
+ *           type: string
+ *           description: Indicates if the candidato has tattoos
+ */
 class Vicios extends Model {}
 
 Vicios.init(

@@ -1,6 +1,35 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Residencia:
+ *       type: object
+ *       properties:
+ *         candidato_id:
+ *           type: string
+ *           description: The unique identifier for a candidato
+ *         vive_con:
+ *           type: string
+ *           description: The people the candidato lives with
+ *         calle:
+ *           type: string
+ *           description: The street of the candidato's residence
+ *         zona:
+ *           type: string
+ *           description: The zone of the candidato's residence
+ *         municipio:
+ *           type: string
+ *           description: The municipality of the candidato's residence
+ *         departamento:
+ *           type: string
+ *           description: The department of the candidato's residence
+ *         pais_de_residencia:
+ *           type: string
+ *           description: The country of the candidato's residence
+ */
 class Residencia extends Model {}
 
 Residencia.init(
