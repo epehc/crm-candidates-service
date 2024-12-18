@@ -8,6 +8,9 @@ import {
   deleteEstudio,
   getEstudiosByCandidatoId
 } from '../controllers/estudioController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -36,7 +39,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch estudios
  */
-router.get('/', getAllEstudios);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllEstudios);
 
 /**
  * @swagger
@@ -63,7 +69,10 @@ router.get('/', getAllEstudios);
  *       500:
  *         description: Failed to fetch estudio
  */
-router.get('/:id', param('id').isUUID(), getEstudioById);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getEstudioById);
 
 /**
  * @swagger
@@ -92,7 +101,10 @@ router.get('/:id', param('id').isUUID(), getEstudioById);
  *       500:
  *         description: Failed to fetch estudios
  */
-router.get('/candidato/:candidato_id', param('candidato_id').isUUID(), getEstudiosByCandidatoId);
+router.get('/candidato/:candidato_id', param('candidato_id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getEstudiosByCandidatoId);
 
 /**
  * @swagger
@@ -118,6 +130,8 @@ router.get('/candidato/:candidato_id', param('candidato_id').isUUID(), getEstudi
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('id').isUUID(),
     body('candidato_id').isUUID(),
@@ -161,6 +175,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('id').isUUID(),
     body('candidato_id').isUUID(),
@@ -192,6 +208,9 @@ router.put(
  *       500:
  *         description: Failed to delete estudio
  */
-router.delete('/:id', param('id').isUUID(), deleteEstudio);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteEstudio);
 
 export default router;

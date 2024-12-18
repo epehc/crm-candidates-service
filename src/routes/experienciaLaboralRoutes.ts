@@ -8,6 +8,9 @@ import {
   updateExperienciaLaboral,
   deleteExperienciaLaboral
 } from '../controllers/experienciaLaboralController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -36,7 +39,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch experiencias laborales
  */
-router.get('/', getAllExperienciasLaborales);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllExperienciasLaborales);
 
 /**
  * @swagger
@@ -63,7 +69,10 @@ router.get('/', getAllExperienciasLaborales);
  *       500:
  *         description: Failed to fetch experiencia laboral
  */
-router.get('/:id', param('id').isUUID(), getExperienciaLaboralById);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getExperienciaLaboralById);
 
 /**
  * @swagger
@@ -92,7 +101,10 @@ router.get('/:id', param('id').isUUID(), getExperienciaLaboralById);
  *       500:
  *         description: Failed to fetch experiencias laborales
  */
-router.get('/candidato/:candidato_id', param('candidato_id').isUUID(), getExperienciasLaboralesByCandidatoId);
+router.get('/candidato/:candidato_id', param('candidato_id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getExperienciasLaboralesByCandidatoId);
 
 /**
  * @swagger
@@ -118,6 +130,8 @@ router.get('/candidato/:candidato_id', param('candidato_id').isUUID(), getExperi
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('id').isUUID(),
     body('candidato_id').isUUID(),
@@ -167,6 +181,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('id').isUUID(),
     body('candidato_id').isUUID(),
@@ -204,6 +220,9 @@ router.put(
  *       500:
  *         description: Failed to delete experiencia laboral
  */
-router.delete('/:id', param('id').isUUID(), deleteExperienciaLaboral);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteExperienciaLaboral);
 
 export default router;

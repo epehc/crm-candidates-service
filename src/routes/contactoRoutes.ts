@@ -1,6 +1,5 @@
 import express from 'express';
 import { body, param } from 'express-validator';
-
 import {
   getAllContactos,
   getContactoById,
@@ -9,6 +8,9 @@ import {
   deleteContacto,
   getContactosByCandidatoId
 } from '../controllers/contactoController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -37,7 +39,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch contactos
  */
-router.get('/', getAllContactos);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllContactos);
 
 /**
  * @swagger
@@ -64,7 +69,10 @@ router.get('/', getAllContactos);
  *       500:
  *         description: Failed to fetch contacto
  */
-router.get('/:id', getContactoById);
+router.get('/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getContactoById);
 
 /**
  * @swagger
@@ -93,7 +101,10 @@ router.get('/:id', getContactoById);
  *       500:
  *         description: Failed to fetch contactos
  */
-router.get('/candidato/:candidato_id', getContactosByCandidatoId);
+router.get('/candidato/:candidato_id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getContactosByCandidatoId);
 
 /**
  * @swagger
@@ -119,6 +130,8 @@ router.get('/candidato/:candidato_id', getContactosByCandidatoId);
  */
 router.post(
     '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
     [
       body('id').isUUID(),
       body('candidato_id').isUUID(),
@@ -161,6 +174,8 @@ router.post(
  */
 router.put(
     '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
     [
       param('id').isUUID(),
     body('parentezco').optional().isString(),
@@ -190,6 +205,9 @@ router.put(
  *       500:
  *         description: Failed to delete contacto
  */
-router.delete('/:id', deleteContacto);
+router.delete('/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteContacto);
 
 export default router;

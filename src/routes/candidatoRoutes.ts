@@ -9,6 +9,9 @@ import {
   deleteCandidato,
   getCandidatoByCandidatoId
 } from '../controllers/candidatoController';
+import { authenticateJWT } from "@epehc/sharedutilities/middlewares/authMiddleware";
+import { authorize } from "@epehc/sharedutilities/middlewares/authorize";
+import { UserRole } from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -38,7 +41,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch candidatos
  */
-router.get('/', getAllCandidatos);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllCandidatos);
 
 /**
  * @swagger
@@ -65,7 +71,10 @@ router.get('/', getAllCandidatos);
  *       500:
  *         description: Failed to fetch candidato
  */
-router.get('/:id', getCandidatoByCandidatoId);
+router.get('/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getCandidatoByCandidatoId);
 
 /**
  * @swagger
@@ -92,7 +101,10 @@ router.get('/:id', getCandidatoByCandidatoId);
  *       500:
  *         description: Failed to fetch candidato
  */
-router.get('/email/:email', getCandidatoByEmail);
+router.get('/email/:email',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getCandidatoByEmail);
 
 /**
  * @swagger
@@ -119,7 +131,10 @@ router.get('/email/:email', getCandidatoByEmail);
  *       500:
  *         description: Failed to fetch candidato
  */
-router.get('/dpi/:dpi', getCandidatoByDPI);
+router.get('/dpi/:dpi',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getCandidatoByDPI);
 
 /**
  * @swagger
@@ -145,6 +160,8 @@ router.get('/dpi/:dpi', getCandidatoByDPI);
  */
 router.post(
     '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
     [
       body('candidato_id').isUUID(),
       body('timestamp').isISO8601(),
@@ -193,6 +210,8 @@ router.post(
  */
 router.put(
     '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
     [
     param('candidato_id').isUUID(),
     body('nombre').optional().isString().notEmpty().withMessage('Nombre es requerido'),
@@ -228,6 +247,9 @@ router.put(
  *       500:
  *         description: Failed to delete candidato
  */
-router.delete('/:id', deleteCandidato);
+router.delete('/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteCandidato);
 
 export default router;

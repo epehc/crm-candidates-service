@@ -7,6 +7,9 @@ import {
   updateVicios,
   deleteVicios
 } from '../controllers/viciosController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -35,7 +38,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch vicios
  */
-router.get('/', getAllVicios);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllVicios);
 
 /**
  * @swagger
@@ -62,7 +68,10 @@ router.get('/', getAllVicios);
  *       500:
  *         description: Failed to fetch vicios
  */
-router.get('/:id', param('id').isUUID(), getViciosByCandidatoId);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getViciosByCandidatoId);
 
 /**
  * @swagger
@@ -90,6 +99,8 @@ router.get('/:id', param('id').isUUID(), getViciosByCandidatoId);
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('candidato_id').isUUID(),
     body('fuma').isString().notEmpty().withMessage('Fuma es requerido'),
@@ -136,6 +147,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('candidato_id').isUUID(),
     body('fuma').optional().isString().notEmpty().withMessage('Fuma es requerido'),
@@ -168,6 +181,9 @@ router.put(
  *       500:
  *         description: Failed to delete vicios
  */
-router.delete('/:id', param('id').isUUID(), deleteVicios);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteVicios);
 
 export default router;

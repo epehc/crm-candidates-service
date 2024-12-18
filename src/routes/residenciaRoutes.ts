@@ -7,6 +7,9 @@ import {
   updateResidencia,
   deleteResidencia
 } from '../controllers/residenciaController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -35,7 +38,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch residencias
  */
-router.get('/', getAllResidencias);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllResidencias);
 
 /**
  * @swagger
@@ -62,7 +68,10 @@ router.get('/', getAllResidencias);
  *       500:
  *         description: Failed to fetch residencia
  */
-router.get('/:id', param('id').isUUID(), getResidenciaByCandidatoId);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getResidenciaByCandidatoId);
 
 /**
  * @swagger
@@ -88,6 +97,8 @@ router.get('/:id', param('id').isUUID(), getResidenciaByCandidatoId);
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('candidato_id').isUUID(),
     body('vive_con').isString().notEmpty().withMessage('Vive con es requerido'),
@@ -131,6 +142,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('candidato_id').isUUID(),
     body('vive_con').optional().isString().notEmpty().withMessage('Vive con es requerido'),
@@ -162,6 +175,9 @@ router.put(
  *       500:
  *         description: Failed to delete residencia
  */
-router.delete('/:id', param('id').isUUID(), deleteResidencia);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteResidencia);
 
 export default router;

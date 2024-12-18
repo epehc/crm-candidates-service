@@ -7,6 +7,9 @@ import {
   updateInformacionPersonal,
   deleteInformacionPersonal
 } from '../controllers/informacionPersonalController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -35,7 +38,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch informaciones personales
  */
-router.get('/', getAllInformacionesPersonales);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllInformacionesPersonales);
 
 /**
  * @swagger
@@ -62,7 +68,10 @@ router.get('/', getAllInformacionesPersonales);
  *       500:
  *         description: Failed to fetch informacion personal
  */
-router.get('/:id', param('id').isUUID(), getInformacionPersonalByCandidatoId);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getInformacionPersonalByCandidatoId);
 
 /**
  * @swagger
@@ -88,6 +97,8 @@ router.get('/:id', param('id').isUUID(), getInformacionPersonalByCandidatoId);
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('candidato_id').isUUID(),
     body('dpi').isString().notEmpty().withMessage('DPI es requerido'),
@@ -141,6 +152,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('candidato_id').isUUID(),
       body('dpi').optional().isString().notEmpty().withMessage('DPI es requerido'),
@@ -182,6 +195,9 @@ router.put(
  *       500:
  *         description: Failed to delete informacion personal
  */
-router.delete('/:id', param('id').isUUID(), deleteInformacionPersonal);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteInformacionPersonal);
 
 export default router;

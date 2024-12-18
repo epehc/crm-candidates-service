@@ -7,6 +7,9 @@ import {
   updateMobilidad,
   deleteMobilidad
 } from '../controllers/mobilidadController';
+import {authenticateJWT} from "@epehc/sharedutilities/middlewares/authMiddleware";
+import {authorize} from "@epehc/sharedutilities/middlewares/authorize";
+import {UserRole} from "@epehc/sharedutilities/enums/userRole";
 
 const router = express.Router();
 
@@ -35,7 +38,10 @@ const router = express.Router();
  *       500:
  *         description: Failed to fetch mobilidades
  */
-router.get('/', getAllMobilidades);
+router.get('/',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getAllMobilidades);
 
 /**
  * @swagger
@@ -62,7 +68,10 @@ router.get('/', getAllMobilidades);
  *       500:
  *         description: Failed to fetch mobilidad
  */
-router.get('/:id', param('id').isUUID(), getMobilidadByCandidatoId);
+router.get('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
+    getMobilidadByCandidatoId);
 
 /**
  * @swagger
@@ -88,6 +97,8 @@ router.get('/:id', param('id').isUUID(), getMobilidadByCandidatoId);
  */
 router.post(
   '/',
+    authenticateJWT,
+    authorize([UserRole.Admin]),
   [
     body('candidato_id').isUUID(),
     body('licencia').isString().notEmpty().withMessage('Licencia es requerido'),
@@ -134,6 +145,8 @@ router.post(
  */
 router.put(
   '/:id',
+    authenticateJWT,
+    authorize([UserRole.Admin, UserRole.Reclutador]),
   [
     param('candidato_id').isUUID(),
       body('licencia').optional().isString().notEmpty().withMessage('Licencia es requerido'),
@@ -168,6 +181,9 @@ router.put(
  *       500:
  *         description: Failed to delete mobilidad
  */
-router.delete('/:id', param('id').isUUID(), deleteMobilidad);
+router.delete('/:id', param('id').isUUID(),
+    authenticateJWT,
+    authorize([UserRole.Admin]),
+    deleteMobilidad);
 
 export default router;
