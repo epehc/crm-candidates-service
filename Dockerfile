@@ -4,7 +4,10 @@ FROM node:18
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+ARG GITHUB_TOKEN
+RUN echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > /root/.npmrc
+
+# Copy the package.json and package-lock.json files to the working directory
 COPY package*.json ./
 
 # Install dependencies
