@@ -1,6 +1,9 @@
 # Node.js dependencies
 node_modules/
 
+#dist folder
+dist/
+
 # TypeScript compiled files
 *.js
 *.js.map
@@ -11,6 +14,7 @@ node_modules/
 
 # Logs
 *.log
+/logs
 
 # OS-specific files
 .DS_Store
@@ -18,4 +22,4 @@ Thumbs.db
 
 # IDE-specific files
 .vscode/
-.idea/
+/.idea
