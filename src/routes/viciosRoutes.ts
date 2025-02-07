@@ -68,7 +68,7 @@ router.get('/',
  *       500:
  *         description: Failed to fetch vicios
  */
-router.get('/:id', param('id').isUUID(),
+router.get('/:candidato_id', param('candidato_id').isUUID(),
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getViciosByCandidatoId);
@@ -146,7 +146,7 @@ router.post(
  *         description: Failed to update vicios
  */
 router.put(
-  '/:id',
+  '/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
   [
@@ -181,7 +181,7 @@ router.put(
  *       500:
  *         description: Failed to delete vicios
  */
-router.delete('/:id', param('id').isUUID(),
+router.delete('/:candidato_id', param('candidato_id').isUUID(),
     authenticateJWT,
     authorize([UserRole.Admin]),
     deleteVicios);

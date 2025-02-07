@@ -101,7 +101,7 @@ router.get('/:id', param('id').isUUID(),
  *       500:
  *         description: Failed to fetch experiencias laborales
  */
-router.get('/candidato/:candidato_id', param('candidato_id').isUUID(),
+router.get('/candidato/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getExperienciasLaboralesByCandidatoId);

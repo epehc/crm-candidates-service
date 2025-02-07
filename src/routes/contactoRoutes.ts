@@ -177,11 +177,11 @@ router.put(
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     [
-      param('id').isUUID(),
-    body('parentezco').optional().isString(),
-    body('nombre').optional().isString().notEmpty().withMessage('Nombre es requerido'),
-    body('trabajo').optional().isString().notEmpty().withMessage('Trabajo es requerido'),
-    body('telefono').optional().isString().notEmpty().withMessage('Telefono es requerido'),
+        param('id').isUUID(),
+        body('parentezco').optional().isString(),
+        body('nombre').optional().isString().notEmpty().withMessage('Nombre es requerido'),
+        body('trabajo').optional().isString().notEmpty().withMessage('Trabajo es requerido'),
+        body('telefono').optional().isString().notEmpty().withMessage('Telefono es requerido'),
     ],
     updateContacto
 );

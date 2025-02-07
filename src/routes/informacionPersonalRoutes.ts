@@ -45,7 +45,7 @@ router.get('/',
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   get:
  *     summary: Get a informacion personal by candidato ID
  *     tags: [InformacionesPersonales]
@@ -68,7 +68,7 @@ router.get('/',
  *       500:
  *         description: Failed to fetch informacion personal
  */
-router.get('/:id', param('id').isUUID(),
+router.get('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getInformacionPersonalByCandidatoId);
@@ -123,7 +123,7 @@ router.post(
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   put:
  *     summary: Update a informacion personal
  *     tags: [InformacionesPersonales]
@@ -151,7 +151,7 @@ router.post(
  *         description: Failed to update informacion personal
  */
 router.put(
-  '/:id',
+  '/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
   [
@@ -178,7 +178,7 @@ router.put(
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   delete:
  *     summary: Delete a informacion personal
  *     tags: [InformacionesPersonales]
@@ -195,7 +195,7 @@ router.put(
  *       500:
  *         description: Failed to delete informacion personal
  */
-router.delete('/:id', param('id').isUUID(),
+router.delete('/:candidato_id', param('candidato_id').isUUID(),
     authenticateJWT,
     authorize([UserRole.Admin]),
     deleteInformacionPersonal);

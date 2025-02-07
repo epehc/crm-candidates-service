@@ -45,9 +45,9 @@ router.get('/',
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   get:
- *     summary: Retrieve a mobilidad by id
+ *     summary: Retrieve a mobilidad by candidato_id
  *     tags: [Mobilidades]
  *     parameters:
  *       - in: path
@@ -68,7 +68,7 @@ router.get('/',
  *       500:
  *         description: Failed to fetch mobilidad
  */
-router.get('/:id', param('id').isUUID(),
+router.get('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getMobilidadByCandidatoId);
@@ -116,7 +116,7 @@ router.post(
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   put:
  *     summary: Update a mobilidad
  *     tags: [Mobilidades]
@@ -144,7 +144,7 @@ router.post(
  *         description: Failed to update mobilidad
  */
 router.put(
-  '/:id',
+  '/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
   [
@@ -164,7 +164,7 @@ router.put(
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   delete:
  *     summary: Delete a mobilidad
  *     tags: [Mobilidades]
@@ -181,7 +181,7 @@ router.put(
  *       500:
  *         description: Failed to delete mobilidad
  */
-router.delete('/:id', param('id').isUUID(),
+router.delete('/:candidato_id', param('candidato_id').isUUID(),
     authenticateJWT,
     authorize([UserRole.Admin]),
     deleteMobilidad);

@@ -45,9 +45,9 @@ router.get('/',
 
 /**
  * @swagger
- * /residencias/{id}:
+ * /residencias/{candidato_id}:
  *   get:
- *     summary: Retrieve a residencia by its id
+ *     summary: Retrieve a residencia by its candidato_id
  *     tags: [Residencias]
  *     parameters:
  *       - in: path
@@ -68,7 +68,7 @@ router.get('/',
  *       500:
  *         description: Failed to fetch residencia
  */
-router.get('/:id', param('id').isUUID(),
+router.get('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getResidenciaByCandidatoId);
@@ -113,7 +113,7 @@ router.post(
 
 /**
  * @swagger
- * /residencias/{id}:
+ * /residencias/{candidato_id}:
  *   put:
  *     summary: Update a residencia
  *     tags: [Residencias]
@@ -141,7 +141,7 @@ router.post(
  *         description: Failed to update residencia
  */
 router.put(
-  '/:id',
+  '/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
   [
@@ -158,7 +158,7 @@ router.put(
 
 /**
  * @swagger
- * /residencias/{id}:
+ * /residencias/{candidato_id}:
  *   delete:
  *     summary: Delete a residencia
  *     tags: [Residencias]
@@ -175,7 +175,7 @@ router.put(
  *       500:
  *         description: Failed to delete residencia
  */
-router.delete('/:id', param('id').isUUID(),
+router.delete('/:candidato_id', param('candidato_id').isUUID(),
     authenticateJWT,
     authorize([UserRole.Admin]),
     deleteResidencia);
