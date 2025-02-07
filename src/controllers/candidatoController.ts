@@ -1,7 +1,10 @@
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Candidato from '../models/candidato';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
+import { Op } from 'sequelize';
+
 
 /**
  * @swagger
@@ -82,25 +85,51 @@ import logger from "../utils/logger";
  *       500:
  *         description: Failed to fetch candidatos
  */
-export const getAllCandidatos = async (req: Request, res: Response) => {
+export const getCandidatos = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        logger.error('Error al cargar candidatos: ', errors);
+        logger.error('Failed to validate request', errors);
         res.status(400).json({ errors: errors.array() });
+        return
     }
+
     try {
-    const candidatos = await Candidato.findAll();
-    logger.info("Candidatos cargados")
-    res.status(200).json(candidatos);
-  } catch (error) {
-        logger.error('Error al cargar candidatos: ', error);
-    res.status(500).json({ error: 'Failed to fetch candidatos' });
-  }
+        const page = parseInt(req.query.page as string) || 1; // Default to page 1
+        const pageSize = parseInt(req.query.pageSize as string) || 12; // Default to 12 items per page
+
+        const offset = (page - 1) * pageSize;
+
+        const query = req.query.query ? req.query.query.toString() : "";
+        const whereClause = query ? {
+            [Op.or]: [
+                { nombre: { [Op.iLike]: `%${query}%` } },
+                { correo: { [Op.iLike]: `%${query}%` } },
+                { puesto_aplicado: { [Op.iLike]: `%${query}%` } }
+            ]
+        } : {};
+
+        const { count, rows: candidates } = await Candidato.findAndCountAll({
+            where: whereClause,
+            order: [['timestamp', 'DESC']],
+            offset,
+            limit: pageSize,
+        });
+
+        res.status(200).json({
+            data: candidates,
+            total: count,
+            totalPages: Math.ceil(count / pageSize),
+            currentPage: page,
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch candidates" });
+    }
 };
+
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   get:
  *     summary: Get a candidato by ID
  *     tags: [Candidatos]
@@ -130,19 +159,19 @@ export const getCandidatoByCandidatoId = async (req: Request, res: Response) => 
         res.status(400).json({ errors: errors.array() });
     }
     try {
-    const { candidato_id } = req.params;
-    const candidato = await Candidato.findByPk(candidato_id);
-    if (candidato) {
-        logger.info(`Candidato con candidato_id: ${candidato_id} cargado.`)
-      res.status(200).json(candidato);
-    } else {
-        logger.error(`Candidato con candidato_id: ${candidato_id} no encontrado.`)
-      res.status(404).json({ error: 'Candidato not found' });
-    }
-  } catch (error) {
+        const candidato_id  = req.params.candidato_id;
+        const candidato = await Candidato.findByPk(candidato_id);
+        if (candidato) {
+            logger.info(`Candidato: ${candidato} cargado.`)
+            res.status(200).json({candidato});
+        } else {
+            logger.error(`Candidato con candidato_id: ${candidato_id} no encontrado.`)
+            res.status(404).json({ error: 'Candidato not found' });
+        }
+    } catch (error) {
         logger.error('Error al cargar candidato: ', error);
-    res.status(500).json({ error: 'Failed to fetch candidato' });
-  }
+        res.status(500).json({ error: 'Failed to fetch candidato' });
+    }
 };
 
 /**
@@ -177,11 +206,11 @@ export const getCandidatoByEmail = async (req: Request, res: Response) => {
         res.status(400).json({ errors: errors.array() });
     }
     try {
-        const { email } = req.params;
+        const email = req.params.email;
         const candidato = await Candidato.findOne({ where: { email } });
         if (candidato) {
             logger.info(`Candidato con email: ${email} cargado.`)
-            res.status(200).json(candidato);
+            res.status(200).json({candidato});
         } else {
             logger.error(`Candidato con email: ${email} no encontrado.`)
             res.status(404).json({ error: 'Candidato not found' });
@@ -224,11 +253,11 @@ export const getCandidatoByDPI = async (req: Request, res: Response) => {
         res.status(400).json({ errors: errors.array() });
     }
     try {
-        const { dpi } = req.params;
+        const dpi = req.params.dpi;
         const candidato = await Candidato.findOne({ where: { dpi } });
         if (candidato) {
             logger.info(`Candidato con dpi: ${dpi} cargado.`)
-            res.status(200).json(candidato);
+            res.status(200).json({candidato});
         } else {
             logger.error(`Candidato con dpi: ${dpi} no encontrado.`)
             res.status(404).json({ error: 'Candidato not found' });
@@ -272,7 +301,7 @@ export const createCandidato = async (req: Request, res: Response): Promise<void
   try {
       const candidato = await Candidato.create(req.body);
       logger.info("Candidato creado")
-      res.status(201).json(candidato);
+      res.status(201).json({candidato});
   } catch (error) {
       logger.error('Error al crear candidato: ', error);
       res.status(500).json({ error: 'Failed to create candidato' });
@@ -281,7 +310,7 @@ export const createCandidato = async (req: Request, res: Response): Promise<void
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   put:
  *     summary: Update a candidato by ID
  *     tags: [Candidatos]
@@ -319,14 +348,14 @@ export const updateCandidato = async (req: Request, res: Response) => {
         res.status(400).json({ errors: errors.array() });
     }
     try {
-    const { id } = req.params;
-    const [updated] = await Candidato.update(req.body, { where: { id } });
+    const candidato_id = req.params.candidato_id;
+    const [updated] = await Candidato.update(req.body, { where: { candidato_id } });
     if (updated) {
-      const updatedCandidato = await Candidato.findByPk(id);
+      const updatedCandidato = await Candidato.findByPk(candidato_id);
         logger.info("Candidato actualizado")
-        res.status(200).json(updatedCandidato);
+        res.status(200).json({updatedCandidato});
     } else {
-        logger.error(`Candidato con id: ${id} no encontrado.`)
+        logger.error(`Candidato con id: ${candidato_id} no encontrado.`)
       res.status(404).json({ error: 'Candidato not found' });
     }
   } catch (error) {
@@ -337,7 +366,7 @@ export const updateCandidato = async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   delete:
  *     summary: Delete a candidato by ID
  *     tags: [Candidatos]
@@ -363,13 +392,13 @@ export const deleteCandidato = async (req: Request, res: Response) => {
         res.status(400).json({ errors: errors.array() });
     }
     try {
-    const { id } = req.params;
-    const deleted = await Candidato.destroy({ where: { id } });
+    const candidato_id = req.params.candidato_id;
+    const deleted = await Candidato.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info("Candidato eliminado")
       res.status(204).send();
     } else {
-        logger.error(`Candidato con id: ${id} no encontrado.`)
+        logger.error(`Candidato con id: ${candidato_id} no encontrado.`)
       res.status(404).json({ error: 'Candidato not found' });
     }
   } catch (error) {
