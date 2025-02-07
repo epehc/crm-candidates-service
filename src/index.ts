@@ -13,11 +13,19 @@ import mobilidadRoutes from "./routes/mobilidadRoutes";
 import residenciaRoutes from "./routes/residenciaRoutes";
 import viciosRoutes from "./routes/viciosRoutes";
 import {setupSwagger} from './utils/swagger';
+import cors from "cors";
 
 const app = express();
 
+const corsOptions = {
+    origin: process.env.FRONTEND_URL, //frontend's URL
+    credentials: true, // Allow credentials (cookies, headers)
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 setupSwagger(app);
+
 app.use("/candidatos", candidatoRoutes);
 app.use("/contactos", contactoRoutes);
 app.use("/estudios", estudioRoutes);
