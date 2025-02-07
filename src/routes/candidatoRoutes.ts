@@ -1,13 +1,12 @@
 import express from 'express';
 import { body, param } from 'express-validator';
 import {
-  getAllCandidatos,
-  getCandidatoByEmail,
-  getCandidatoByDPI,
-  createCandidato,
-  updateCandidato,
-  deleteCandidato,
-  getCandidatoByCandidatoId
+    getCandidatoByEmail,
+    getCandidatoByDPI,
+    createCandidato,
+    updateCandidato,
+    deleteCandidato,
+    getCandidatoByCandidatoId, getCandidatos
 } from '../controllers/candidatoController';
 import { authenticateJWT } from "@epehc/sharedutilities/middlewares/authMiddleware";
 import { authorize } from "@epehc/sharedutilities/middlewares/authorize";
@@ -44,11 +43,11 @@ const router = express.Router();
 router.get('/',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
-    getAllCandidatos);
+    getCandidatos);
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   get:
  *     summary: Get a candidato by ID
  *     tags: [Candidatos]
@@ -71,7 +70,7 @@ router.get('/',
  *       500:
  *         description: Failed to fetch candidato
  */
-router.get('/:id',
+router.get('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getCandidatoByCandidatoId);
@@ -163,23 +162,23 @@ router.post(
     authenticateJWT,
     authorize([UserRole.Admin]),
     [
-      body('candidato_id').isUUID(),
-      body('timestamp').isISO8601(),
-      body('nombre').isString().notEmpty().withMessage('Nombre es requerido'),
-      body('puesto_aplicado').isString().notEmpty().withMessage('Puesto aplicado es requerido'),
-      body('como_se_entero').isString().notEmpty().withMessage('Como se entero es requerido'),
-      body('genero').isString().notEmpty().withMessage('Genero es requerido'),
-      body('telefono_whatsapp').isString().notEmpty().withMessage('Telefono para WhatsApp es requerido'),
-      body('telefono').isString().notEmpty().withMessage('Telefono es requerido'),
-      body('correo').isEmail().notEmpty().withMessage('Correo es requerido'),
-      body('aspiracion_salarial').isString().notEmpty().withMessage('Aspiracion salarial es requerido'),
+        body('candidato_id').isUUID(),
+        body('timestamp').isISO8601(),
+        body('nombre').isString().notEmpty().withMessage('Nombre es requerido'),
+        body('puesto_aplicado').isString().notEmpty().withMessage('Puesto aplicado es requerido'),
+        body('como_se_entero').isString().notEmpty().withMessage('Como se entero es requerido'),
+        body('genero').isString().notEmpty().withMessage('Genero es requerido'),
+        body('telefono_whatsapp').isString().notEmpty().withMessage('Telefono para WhatsApp es requerido'),
+        body('telefono').isString().notEmpty().withMessage('Telefono es requerido'),
+        body('correo').isEmail().notEmpty().withMessage('Correo es requerido'),
+        body('aspiracion_salarial').isString().notEmpty().withMessage('Aspiracion salarial es requerido'),
     ],
     createCandidato
 );
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   put:
  *     summary: Update a candidato
  *     tags: [Candidatos]
@@ -209,7 +208,7 @@ router.post(
  *         description: Failed to update candidato
  */
 router.put(
-    '/:id',
+    '/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     [
@@ -228,7 +227,7 @@ router.put(
 
 /**
  * @swagger
- * /candidatos/{id}:
+ * /candidatos/{candidato_id}:
  *   delete:
  *     summary: Delete a candidato
  *     tags: [Candidatos]
@@ -247,7 +246,7 @@ router.put(
  *       500:
  *         description: Failed to delete candidato
  */
-router.delete('/:id',
+router.delete('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin]),
     deleteCandidato);
