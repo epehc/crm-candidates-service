@@ -1,5 +1,5 @@
-// controllers/viciosController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Vicios from '../models/vicios';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -111,7 +111,7 @@ export const getViciosByCandidatoId = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const vicios = await Vicios.findByPk(candidato_id);
     if (vicios) {
         logger.info(`Vicios del candidato con candidato_id: ${candidato_id} cargados.`)
@@ -202,7 +202,7 @@ export const updateVicios = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const [updated] = await Vicios.update(req.body, { where: { candidato_id } });
     if (updated) {
       const updatedVicios = await Vicios.findByPk(candidato_id);
@@ -246,7 +246,7 @@ export const deleteVicios = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const deleted = await Vicios.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info("Vicios eliminados")

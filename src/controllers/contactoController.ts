@@ -1,5 +1,5 @@
-// controllers/contactoController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Contacto from '../models/contacto';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -159,8 +159,8 @@ export const getContactosByCandidatoId = async (req: Request, res: Response) => 
     res.status(400).json({ errors: errors.array() });
   }
   try {
-        const { candidato_id } = req.params;
-        const contactos = await Contacto.findAll({ where: { candidato_id } });
+        const candidato_id  = req.params.candidato_id;
+        const contactos = await Contacto.findAll({ where: { candidato_id: candidato_id } });
         logger.info(`Contactos del candidato con candidato_id: ${candidato_id} cargados.`)
         res.status(200).json(contactos);
     } catch (error) {
@@ -248,7 +248,7 @@ export const updateContacto = async (req: Request, res: Response) => {
     res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const  id  = req.params.id;
     const [updated] = await Contacto.update(req.body, { where: { id } });
     if (updated) {
       const updatedContacto = await Contacto.findByPk(id);
@@ -292,7 +292,7 @@ export const deleteContacto = async (req: Request, res: Response) => {
     res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id = req.params.id;
     const deleted = await Contacto.destroy({ where: { id } });
     if (deleted) {
       logger.info("Contacto eliminado")

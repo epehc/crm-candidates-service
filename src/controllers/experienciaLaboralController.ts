@@ -1,5 +1,5 @@
-// controllers/experienciaLaboralController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import ExperienciaLaboral from '../models/experienciaLaboral';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -139,7 +139,7 @@ export const getExperienciaLaboralById = async (req: Request, res: Response) => 
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const experienciaLaboral = await ExperienciaLaboral.findByPk(id);
     if (experienciaLaboral) {
         logger.info(`Experiencia laboral con id: ${id} cargada.`)
@@ -188,8 +188,8 @@ export const getExperienciasLaboralesByCandidatoId = async (req: Request, res: R
       res.status(400).json({ errors: errors.array() });
   }
   try {
-        const { candidato_id } = req.params;
-        const experienciasLaborales = await ExperienciaLaboral.findAll({ where: { candidato_id } });
+        const candidato_id = req.params.candidato_id;
+        const experienciasLaborales = await ExperienciaLaboral.findAll({ where: { candidato_id: candidato_id } });
         logger.info(`Experiencias laborales del candidato con candidato_id: ${candidato_id} cargadas.`)
         res.status(200).json(experienciasLaborales);
     } catch (error) {
@@ -274,7 +274,7 @@ export const updateExperienciaLaboral = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const [updated] = await ExperienciaLaboral.update(req.body, { where: { id } });
     if (updated) {
       const updatedExperienciaLaboral = await ExperienciaLaboral.findByPk(id);
@@ -318,7 +318,7 @@ export const deleteExperienciaLaboral = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const deleted = await ExperienciaLaboral.destroy({ where: { id } });
     if (deleted) {
         logger.info(`Experiencia laboral con id: ${id} eliminada.`)

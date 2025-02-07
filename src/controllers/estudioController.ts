@@ -1,5 +1,5 @@
-// controllers/estudioController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Estudio from '../models/estudio';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -106,7 +106,7 @@ export const getEstudioById = async (req: Request, res: Response) => {
     res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const estudio = await Estudio.findByPk(id);
     if (estudio) {
       logger.info(`Estudio con id: ${id} cargado.`)
@@ -155,8 +155,8 @@ export const getEstudiosByCandidatoId = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
-    const estudios = await Estudio.findAll({ where: { candidato_id } });
+    const candidato_id = req.params.candidato_id;
+    const estudios = await Estudio.findAll({ where: { candidato_id: candidato_id } });
     logger.info(`Estudios del candidato con candidato_id: ${candidato_id} cargados.`)
     res.status(200).json(estudios);
   } catch (error) {
@@ -245,7 +245,7 @@ export const updateEstudio = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const [updated] = await Estudio.update(req.body, { where: { id } });
     if (updated) {
       const updatedEstudio = await Estudio.findByPk(id);
@@ -289,7 +289,7 @@ export const deleteEstudio = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const deleted = await Estudio.destroy({ where: { id } });
     if (deleted) {
         logger.info("Estudio eliminado")

@@ -1,5 +1,5 @@
-// controllers/mobilidadController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Mobilidad from '../models/mobilidad';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -96,7 +96,7 @@ export const getAllMobilidades = async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   get:
  *     summary: Get a mobilidad by candidato ID
  *     tags: [Mobilidades]
@@ -126,7 +126,7 @@ export const getMobilidadByCandidatoId = async (req: Request, res: Response) => 
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const mobilidad = await Mobilidad.findByPk(candidato_id);
     if (mobilidad) {
         logger.info(`Mobilidad con candidato_id: ${candidato_id} cargado.`)
@@ -183,7 +183,7 @@ export const createMobilidad = async (req: Request, res: Response): Promise<void
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   put:
  *     summary: Update a mobilidad
  *     tags: [Mobilidades]
@@ -221,7 +221,7 @@ export const updateMobilidad = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id  = req.params.candidato_id;
     const [updated] = await Mobilidad.update(req.body, { where: { candidato_id } });
     if (updated) {
       const updatedMobilidad = await Mobilidad.findByPk(candidato_id);
@@ -239,7 +239,7 @@ export const updateMobilidad = async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /mobilidades/{id}:
+ * /mobilidades/{candidato_id}:
  *   delete:
  *     summary: Remove a mobilidad
  *     tags: [Mobilidades]
@@ -265,7 +265,7 @@ export const deleteMobilidad = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id  = req.params.candidato_id;
     const deleted = await Mobilidad.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info(`Mobilidad con candidato_id: ${candidato_id} eliminada.`)

@@ -1,5 +1,5 @@
-// controllers/residenciaController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import Residencia from '../models/residencia';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -116,7 +116,7 @@ export const getResidenciaByCandidatoId = async (req: Request, res: Response) =>
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const residencia = await Residencia.findByPk(candidato_id);
     if (residencia) {
         logger.info(`Residencia con candidato_id: ${candidato_id} cargada.`)
@@ -207,7 +207,7 @@ export const updateResidencia = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id  = req.params.candidato_id;
     const [updated] = await Residencia.update(req.body, { where: { candidato_id } });
     if (updated) {
       const updatedResidencia = await Residencia.findByPk(candidato_id);
@@ -251,7 +251,7 @@ export const deleteResidencia = async (req: Request, res: Response) => {
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id  = req.params.candidato_id;
     const deleted = await Residencia.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info(`Residencia con candidato_id: ${candidato_id} eliminada.`)

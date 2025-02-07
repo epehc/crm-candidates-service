@@ -1,5 +1,5 @@
-// controllers/informacionPersonalController.ts
-import { Request, Response } from 'express';
+import { Request } from "@epehc/sharedutilities/types/express";
+import { Response } from "express";
 import InformacionPersonal from '../models/informacionPersonal';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
@@ -130,7 +130,7 @@ export const getAllInformacionesPersonales = async (req: Request, res: Response)
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   get:
  *     summary: Get a informacion personal by candidato ID
  *     tags: [InformacionesPersonales]
@@ -160,7 +160,7 @@ export const getInformacionPersonalByCandidatoId = async (req: Request, res: Res
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const informacionPersonal = await InformacionPersonal.findByPk(candidato_id);
     if (informacionPersonal) {
       logger.info(`Informacion personal con candidato_id: ${candidato_id} cargada.`)
@@ -217,7 +217,7 @@ export const createInformacionPersonal = async (req: Request, res: Response): Pr
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   put:
  *     summary: Update a informacion personal
  *     tags: [InformacionesPersonales]
@@ -255,7 +255,7 @@ export const updateInformacionPersonal = async (req: Request, res: Response) => 
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id  = req.params.candidato_id;
     const [updated] = await InformacionPersonal.update(req.body, { where: { candidato_id } });
     if (updated) {
       const updatedInformacionPersonal = await InformacionPersonal.findByPk(candidato_id);
@@ -273,7 +273,7 @@ export const updateInformacionPersonal = async (req: Request, res: Response) => 
 
 /**
  * @swagger
- * /informaciones-personales/{id}:
+ * /informaciones-personales/{candidato_id}:
  *   delete:
  *     summary: Remove a informacion personal
  *     tags: [InformacionesPersonales]
@@ -299,7 +299,7 @@ export const deleteInformacionPersonal = async (req: Request, res: Response) => 
       res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { candidato_id } = req.params;
+    const candidato_id = req.params.candidato_id;
     const deleted = await InformacionPersonal.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info(`Informacion personal con candidato_id: ${candidato_id} eliminada.`)
