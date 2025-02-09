@@ -96,14 +96,17 @@ export const getAllExperienciasLaborales = async (req: Request, res: Response) =
   if (!errors.isEmpty()) {
     logger.error('Error al cargar experiencias laborales: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const experienciasLaborales = await ExperienciaLaboral.findAll();
     logger.info("Experiencias laborales cargadas")
     res.status(200).json(experienciasLaborales);
+    return
   } catch (error) {
     logger.error('Error al cargar experiencias laborales: ', error);
     res.status(500).json({ error: 'Failed to fetch experiencias laborales' });
+    return
   }
 };
 
@@ -137,6 +140,7 @@ export const getExperienciaLaboralById = async (req: Request, res: Response) => 
   if (!errors.isEmpty()) {
     logger.error('Error al cargar experiencia laboral: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const id  = req.params.id;
@@ -144,13 +148,16 @@ export const getExperienciaLaboralById = async (req: Request, res: Response) => 
     if (experienciaLaboral) {
         logger.info(`Experiencia laboral con id: ${id} cargada.`)
       res.status(200).json(experienciaLaboral);
+      return
     } else {
         logger.error(`Experiencia laboral con id: ${id} no encontrada.`)
       res.status(404).json({ error: 'Experiencia laboral not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar experiencia laboral: ', error);
     res.status(500).json({ error: 'Failed to fetch experiencia laboral' });
+    return
   }
 };
 
@@ -186,15 +193,18 @@ export const getExperienciasLaboralesByCandidatoId = async (req: Request, res: R
   if (!errors.isEmpty()) {
     logger.error('Error al cargar experiencias laborales: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
         const candidato_id = req.params.candidato_id;
         const experienciasLaborales = await ExperienciaLaboral.findAll({ where: { candidato_id: candidato_id } });
         logger.info(`Experiencias laborales del candidato con candidato_id: ${candidato_id} cargadas.`)
         res.status(200).json(experienciasLaborales);
+        return
     } catch (error) {
     logger.error('Error al cargar experiencias laborales: ', error);
         res.status(500).json({ error: 'Failed to fetch experiencias laborales' });
+        return
     }
 };
 
@@ -225,14 +235,17 @@ export const createExperienciaLaboral = async (req: Request, res: Response): Pro
   if (!errors.isEmpty()) {
     logger.error('Error al crear experiencia laboral: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const experienciaLaboral = await ExperienciaLaboral.create(req.body);
     logger.info("Experiencia laboral creada")
     res.status(201).json(experienciaLaboral);
+    return
   } catch (error) {
     logger.error('Error al crear experiencia laboral: ', error);
     res.status(500).json({ error: 'Failed to create experiencia laboral' });
+    return
   }
 };
 
@@ -272,6 +285,7 @@ export const updateExperienciaLaboral = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar experiencia laboral: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const id  = req.params.id;
@@ -280,13 +294,16 @@ export const updateExperienciaLaboral = async (req: Request, res: Response) => {
       const updatedExperienciaLaboral = await ExperienciaLaboral.findByPk(id);
         logger.info("Experiencia laboral actualizada")
       res.status(200).json(updatedExperienciaLaboral);
+      return
     } else {
         logger.error(`Experiencia laboral con id: ${id} no encontrada.`)
       res.status(404).json({ error: 'Experiencia laboral not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar experiencia laboral: ', error);
     res.status(500).json({ error: 'Failed to update experiencia laboral' });
+    return
   }
 };
 
@@ -316,6 +333,7 @@ export const deleteExperienciaLaboral = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar experiencia laboral: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const id  = req.params.id;
@@ -323,12 +341,15 @@ export const deleteExperienciaLaboral = async (req: Request, res: Response) => {
     if (deleted) {
         logger.info(`Experiencia laboral con id: ${id} eliminada.`)
       res.status(204).send();
+      return
     } else {
         logger.error(`Experiencia laboral con id: ${id} no encontrada.`)
       res.status(404).json({ error: 'Experiencia laboral not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar experiencia laboral: ', error);
     res.status(500).json({ error: 'Failed to delete experiencia laboral' });
+    return
   }
 };

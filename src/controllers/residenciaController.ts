@@ -73,14 +73,17 @@ export const getAllResidencias = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar residencias: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const residencias = await Residencia.findAll();
     logger.info("Residencias cargadas")
     res.status(200).json(residencias);
+    return
   } catch (error) {
     logger.error('Error al cargar residencias: ', error);
     res.status(500).json({ error: 'Failed to fetch residencias' });
+    return
   }
 };
 
@@ -114,6 +117,7 @@ export const getResidenciaByCandidatoId = async (req: Request, res: Response) =>
   if (!errors.isEmpty()) {
     logger.error('Error al cargar residencia: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -121,13 +125,16 @@ export const getResidenciaByCandidatoId = async (req: Request, res: Response) =>
     if (residencia) {
         logger.info(`Residencia con candidato_id: ${candidato_id} cargada.`)
       res.status(200).json(residencia);
+      return
     } else {
         logger.error(`Residencia con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Residencia not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar residencia: ', error);
     res.status(500).json({ error: 'Failed to fetch residencia' });
+    return
   }
 };
 
@@ -158,14 +165,17 @@ export const createResidencia = async (req: Request, res: Response): Promise<voi
   if (!errors.isEmpty()) {
     logger.error('Error al crear residencia: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const residencia = await Residencia.create(req.body);
     logger.info("Residencia creada")
     res.status(201).json(residencia);
+    return
   } catch (error) {
     logger.error('Error al crear residencia: ', error);
     res.status(500).json({ error: 'Failed to create residencia' });
+    return
   }
 };
 
@@ -205,6 +215,7 @@ export const updateResidencia = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar residencia: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id  = req.params.candidato_id;
@@ -213,13 +224,16 @@ export const updateResidencia = async (req: Request, res: Response) => {
       const updatedResidencia = await Residencia.findByPk(candidato_id);
         logger.info("Residencia actualizada")
       res.status(200).json(updatedResidencia);
+      return
     } else {
         logger.error(`Residencia con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Residencia not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar residencia: ', error);
     res.status(500).json({ error: 'Failed to update residencia' });
+    return
   }
 };
 
@@ -249,6 +263,7 @@ export const deleteResidencia = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar residencia: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id  = req.params.candidato_id;
@@ -256,12 +271,15 @@ export const deleteResidencia = async (req: Request, res: Response) => {
     if (deleted) {
         logger.info(`Residencia con candidato_id: ${candidato_id} eliminada.`)
       res.status(204).send();
+      return
     } else {
         logger.error(`Residencia con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Residencia not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar residencia: ', error);
     res.status(500).json({ error: 'Failed to delete residencia' });
+    return
   }
 };

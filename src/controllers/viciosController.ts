@@ -68,14 +68,17 @@ export const getAllVicios = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar vicios: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const vicios = await Vicios.findAll();
     logger.info("Vicios cargados")
     res.status(200).json(vicios);
+    return
   } catch (error) {
     logger.error('Error al cargar vicios: ', error);
     res.status(500).json({ error: 'Failed to fetch vicios' });
+    return
   }
 };
 
@@ -109,6 +112,7 @@ export const getViciosByCandidatoId = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar vicios: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -116,13 +120,16 @@ export const getViciosByCandidatoId = async (req: Request, res: Response) => {
     if (vicios) {
         logger.info(`Vicios del candidato con candidato_id: ${candidato_id} cargados.`)
       res.status(200).json(vicios);
+      return
     } else {
         logger.error(`Vicios del candidato con candidato_id: ${candidato_id} no encontrados.`)
       res.status(404).json({ error: 'Vicios not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar vicios: ', error);
     res.status(500).json({ error: 'Failed to fetch vicios' });
+    return
   }
 };
 
@@ -153,14 +160,17 @@ export const createVicios = async (req: Request, res: Response): Promise<void> =
   if (!errors.isEmpty()) {
     logger.error('Error al crear vicios: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const vicios = await Vicios.create(req.body);
     logger.info("Vicios creados")
     res.status(201).json(vicios);
+    return
   } catch (error) {
     logger.error('Error al crear vicios: ', error);
     res.status(500).json({ error: 'Failed to create vicios' });
+    return
   }
 };
 
@@ -200,6 +210,7 @@ export const updateVicios = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar vicios: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -208,13 +219,16 @@ export const updateVicios = async (req: Request, res: Response) => {
       const updatedVicios = await Vicios.findByPk(candidato_id);
         logger.info("Vicios actualizados")
       res.status(200).json(updatedVicios);
+      return
     } else {
         logger.error(`Vicios del candidato con candidato_id: ${candidato_id} no encontrados.`)
       res.status(404).json({ error: 'Vicios not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar vicios: ', error);
     res.status(500).json({ error: 'Failed to update vicios' });
+    return
   }
 };
 
@@ -244,6 +258,7 @@ export const deleteVicios = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar vicios: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -251,12 +266,15 @@ export const deleteVicios = async (req: Request, res: Response) => {
     if (deleted) {
         logger.info("Vicios eliminados")
       res.status(204).send();
+      return
     } else {
         logger.error(`Vicios del candidato con candidato_id: ${candidato_id} no encontrados.`)
       res.status(404).json({ error: 'Vicios not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar vicios: ', error);
     res.status(500).json({ error: 'Failed to delete vicios' });
+    return
   }
 };

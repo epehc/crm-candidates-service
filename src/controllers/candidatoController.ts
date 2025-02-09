@@ -4,6 +4,8 @@ import Candidato from '../models/candidato';
 import {validationResult} from "express-validator";
 import logger from "../utils/logger";
 import { Op } from 'sequelize';
+import { fn, col } from 'sequelize';
+
 
 
 /**
@@ -110,7 +112,7 @@ export const getCandidatos = async (req: Request, res: Response) => {
 
         const { count, rows: candidates } = await Candidato.findAndCountAll({
             where: whereClause,
-            order: [['timestamp', 'DESC']],
+            order: [[fn('to_date', col('timestamp'), 'DD/MM/YYYY'), 'DESC']],
             offset,
             limit: pageSize,
         });
@@ -121,8 +123,10 @@ export const getCandidatos = async (req: Request, res: Response) => {
             totalPages: Math.ceil(count / pageSize),
             currentPage: page,
         });
+        return
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch candidates" });
+        return
     }
 };
 
@@ -157,6 +161,7 @@ export const getCandidatoByCandidatoId = async (req: Request, res: Response) => 
     if (!errors.isEmpty()) {
         logger.error('Error al cargar candidato: ', errors);
         res.status(400).json({ errors: errors.array() });
+        return
     }
     try {
         const candidato_id  = req.params.candidato_id;
@@ -164,107 +169,16 @@ export const getCandidatoByCandidatoId = async (req: Request, res: Response) => 
         if (candidato) {
             logger.info(`Candidato: ${candidato} cargado.`)
             res.status(200).json({candidato});
+            return
         } else {
             logger.error(`Candidato con candidato_id: ${candidato_id} no encontrado.`)
             res.status(404).json({ error: 'Candidato not found' });
+            return
         }
     } catch (error) {
         logger.error('Error al cargar candidato: ', error);
         res.status(500).json({ error: 'Failed to fetch candidato' });
-    }
-};
-
-/**
- * @swagger
- * /candidatos/email/{email}:
- *   get:
- *     summary: Get a candidato by email
- *     tags: [Candidatos]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The candidato email
- *     responses:
- *       200:
- *         description: The candidato description by email
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Candidato'
- *       404:
- *         description: Candidato not found
- *       500:
- *         description: Failed to fetch candidato
- */
-export const getCandidatoByEmail = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        logger.error('Error al cargar candidato: ', errors);
-        res.status(400).json({ errors: errors.array() });
-    }
-    try {
-        const email = req.params.email;
-        const candidato = await Candidato.findOne({ where: { email } });
-        if (candidato) {
-            logger.info(`Candidato con email: ${email} cargado.`)
-            res.status(200).json({candidato});
-        } else {
-            logger.error(`Candidato con email: ${email} no encontrado.`)
-            res.status(404).json({ error: 'Candidato not found' });
-        }
-    } catch (error) {
-        logger.error('Error al cargar candidato: ', error);
-        res.status(500).json({ error: 'Failed to fetch candidato' });
-    }
-};
-
-/**
- * @swagger
- * /candidatos/dpi/{dpi}:
- *   get:
- *     summary: Get a candidato by DPI
- *     tags: [Candidatos]
- *     parameters:
- *       - in: path
- *         name: dpi
- *         schema:
- *           type: string
- *         required: true
- *         description: The candidato DPI
- *     responses:
- *       200:
- *         description: The candidato description by DPI
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Candidato'
- *       404:
- *         description: Candidato not found
- *       500:
- *         description: Failed to fetch candidato
- */
-export const getCandidatoByDPI = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        logger.error('Error al cargar candidato: ', errors);
-        res.status(400).json({ errors: errors.array() });
-    }
-    try {
-        const dpi = req.params.dpi;
-        const candidato = await Candidato.findOne({ where: { dpi } });
-        if (candidato) {
-            logger.info(`Candidato con dpi: ${dpi} cargado.`)
-            res.status(200).json({candidato});
-        } else {
-            logger.error(`Candidato con dpi: ${dpi} no encontrado.`)
-            res.status(404).json({ error: 'Candidato not found' });
-        }
-    } catch (error) {
-        logger.error('Error al cargar candidato: ', error);
-        res.status(500).json({ error: 'Failed to fetch candidato' });
+        return
     }
 };
 
@@ -293,19 +207,22 @@ export const getCandidatoByDPI = async (req: Request, res: Response) => {
  *         description: Failed to create candidato
  */
 export const createCandidato = async (req: Request, res: Response): Promise<void> => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-      logger.error('Error al crear candidato: ', errors);
-      res.status(400).json({ errors: errors.array() });
-  }
-  try {
-      const candidato = await Candidato.create(req.body);
-      logger.info("Candidato creado")
-      res.status(201).json({candidato});
-  } catch (error) {
-      logger.error('Error al crear candidato: ', error);
-      res.status(500).json({ error: 'Failed to create candidato' });
-  }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        logger.error('Error al crear candidato: ', errors);
+        res.status(400).json({ errors: errors.array() });
+        return
+    }
+    try {
+        const candidato = await Candidato.create(req.body);
+        logger.info("Candidato creado")
+        res.status(201).json({candidato});
+        return
+    } catch (error) {
+        logger.error('Error al crear candidato: ', error);
+        res.status(500).json({ error: 'Failed to create candidato' });
+        return
+    }
 };
 
 /**
@@ -344,24 +261,28 @@ export const createCandidato = async (req: Request, res: Response): Promise<void
 export const updateCandidato = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        logger.error('Error al actualizar candidato: ', errors);
+        logger.error('Error al actualizar candidato: ', errors.array());
         res.status(400).json({ errors: errors.array() });
+        return
     }
     try {
     const candidato_id = req.params.candidato_id;
     const [updated] = await Candidato.update(req.body, { where: { candidato_id } });
     if (updated) {
-      const updatedCandidato = await Candidato.findByPk(candidato_id);
+        const updatedCandidato = await Candidato.findByPk(candidato_id);
         logger.info("Candidato actualizado")
         res.status(200).json({updatedCandidato});
+        return
     } else {
         logger.error(`Candidato con id: ${candidato_id} no encontrado.`)
-      res.status(404).json({ error: 'Candidato not found' });
+        res.status(404).json({ error: 'Candidato not found' });
+        return
     }
-  } catch (error) {
+    } catch (error) {
         logger.error('Error al actualizar candidato: ', error);
-    res.status(500).json({ error: 'Failed to update candidato' });
-  }
+        res.status(500).json({ error: 'Failed to update candidato' });
+        return
+    }
 };
 
 /**
@@ -390,19 +311,23 @@ export const deleteCandidato = async (req: Request, res: Response) => {
     if (!errors.isEmpty()) {
         logger.error('Error al eliminar candidato: ', errors);
         res.status(400).json({ errors: errors.array() });
+        return
     }
     try {
     const candidato_id = req.params.candidato_id;
     const deleted = await Candidato.destroy({ where: { candidato_id } });
     if (deleted) {
         logger.info("Candidato eliminado")
-      res.status(204).send();
+        res.status(204).send();
+        return
     } else {
         logger.error(`Candidato con id: ${candidato_id} no encontrado.`)
-      res.status(404).json({ error: 'Candidato not found' });
+        res.status(404).json({ error: 'Candidato not found' });
+        return
     }
-  } catch (error) {
+    } catch (error) {
         logger.error('Error al eliminar candidato: ', error);
-    res.status(500).json({ error: 'Failed to delete candidato' });
-  }
+        res.status(500).json({ error: 'Failed to delete candidato' });
+        return
+    }
 };

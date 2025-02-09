@@ -67,14 +67,17 @@ export const getAllContactos = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar contactos: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const contactos = await Contacto.findAll();
     logger.info("Contactos cargados")
     res.status(200).json(contactos);
+    return
   } catch (error) {
     logger.error('Error al cargar contactos: ', error);
     res.status(500).json({ error: 'Failed to fetch contactos' });
+    return
   }
 };
 
@@ -108,6 +111,7 @@ export const getContactoById = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar contacto: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const { id } = req.params;
@@ -115,13 +119,16 @@ export const getContactoById = async (req: Request, res: Response) => {
     if (contacto) {
       logger.info(`Contacto con id: ${id} cargado.`)
       res.status(200).json(contacto);
+      return
     } else {
       logger.error(`Contacto con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Contacto not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar contacto: ', error);
     res.status(500).json({ error: 'Failed to fetch contacto' });
+    return
   }
 };
 
@@ -157,15 +164,18 @@ export const getContactosByCandidatoId = async (req: Request, res: Response) => 
   if (!errors.isEmpty()) {
     logger.error('Error al cargar contactos: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
         const candidato_id  = req.params.candidato_id;
         const contactos = await Contacto.findAll({ where: { candidato_id: candidato_id } });
         logger.info(`Contactos del candidato con candidato_id: ${candidato_id} cargados.`)
         res.status(200).json(contactos);
+        return
     } catch (error) {
     logger.error('Error al cargar contactos: ', error);
         res.status(500).json({ error: 'Failed to fetch contactos' });
+        return
     }
 };
 
@@ -198,14 +208,17 @@ export const createContacto = async (req: Request, res: Response): Promise<void>
   if (!errors.isEmpty()) {
     logger.error('Error al crear contacto: ', errors);
      res.status(400).json({ errors: errors.array() });
+     return
   }
   try {
     const contacto = await Contacto.create(req.body);
     logger.info("Contacto creado")
     res.status(201).json(contacto);
+    return
   } catch (error) {
     logger.error('Error al crear contacto: ', error);
     res.status(500).json({ error: 'Failed to create contacto' });
+    return
   }
 };
 /**
@@ -246,6 +259,7 @@ export const updateContacto = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar contacto: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const  id  = req.params.id;
@@ -254,13 +268,16 @@ export const updateContacto = async (req: Request, res: Response) => {
       const updatedContacto = await Contacto.findByPk(id);
       logger.info("Contacto actualizado")
       res.status(200).json(updatedContacto);
+      return
     } else {
       logger.error(`Contacto con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Contacto not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar contacto: ', error);
     res.status(500).json({ error: 'Failed to update contacto' });
+    return
   }
 };
 
@@ -290,6 +307,7 @@ export const deleteContacto = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar contacto: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const id = req.params.id;
@@ -297,12 +315,15 @@ export const deleteContacto = async (req: Request, res: Response) => {
     if (deleted) {
       logger.info("Contacto eliminado")
       res.status(204).send();
+      return
     } else {
       logger.error(`Contacto con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Contacto not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar contacto: ', error);
     res.status(500).json({ error: 'Failed to delete contacto' });
+    return
   }
 };

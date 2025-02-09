@@ -63,14 +63,17 @@ export const getAllEstudios = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar estudios: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const estudios = await Estudio.findAll();
     logger.info("Estudios cargados")
     res.status(200).json(estudios);
+    return
   } catch (error) {
     logger.error('Error al cargar estudios: ', error);
     res.status(500).json({ error: 'Failed to fetch estudios' });
+    return
   }
 };
 
@@ -104,6 +107,7 @@ export const getEstudioById = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar estudio: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const id  = req.params.id;
@@ -111,13 +115,16 @@ export const getEstudioById = async (req: Request, res: Response) => {
     if (estudio) {
       logger.info(`Estudio con id: ${id} cargado.`)
       res.status(200).json(estudio);
+      return
     } else {
       logger.error(`Estudio con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Estudio not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar estudio: ', error);
     res.status(500).json({ error: 'Failed to fetch estudio' });
+    return
   }
 };
 
@@ -153,15 +160,18 @@ export const getEstudiosByCandidatoId = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar estudios: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
     const estudios = await Estudio.findAll({ where: { candidato_id: candidato_id } });
     logger.info(`Estudios del candidato con candidato_id: ${candidato_id} cargados.`)
     res.status(200).json(estudios);
+    return
   } catch (error) {
     logger.error('Error al cargar estudios: ', error);
     res.status(500).json({ error: 'Failed to fetch estudios' });
+    return
   }
 };
 
@@ -194,14 +204,17 @@ export const createEstudio = async (req: Request, res: Response): Promise<void> 
   if (!errors.isEmpty()) {
     logger.error('Error al crear estudio: ', errors);
      res.status(400).json({ errors: errors.array() });
+     return
   }
   try {
     const estudio = await Estudio.create(req.body);
     logger.info("Estudio creado")
     res.status(201).json(estudio);
+    return
   } catch (error) {
     logger.error('Error al crear estudio: ', error);
     res.status(500).json({ error: 'Failed to create estudio' });
+    return
   }
 };
 
@@ -243,6 +256,7 @@ export const updateEstudio = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar estudio: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const id  = req.params.id;
@@ -251,13 +265,16 @@ export const updateEstudio = async (req: Request, res: Response) => {
       const updatedEstudio = await Estudio.findByPk(id);
       logger.info("Estudio actualizado")
       res.status(200).json(updatedEstudio);
+      return
     } else {
         logger.error(`Estudio con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Estudio not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar estudio: ', error);
     res.status(500).json({ error: 'Failed to update estudio' });
+    return
   }
 };
 
@@ -287,6 +304,7 @@ export const deleteEstudio = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar estudio: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const id  = req.params.id;
@@ -294,12 +312,15 @@ export const deleteEstudio = async (req: Request, res: Response) => {
     if (deleted) {
         logger.info("Estudio eliminado")
       res.status(204).send();
+      return
     } else {
         logger.error(`Estudio con id: ${id} no encontrado.`)
       res.status(404).json({ error: 'Estudio not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar estudio: ', error);
     res.status(500).json({ error: 'Failed to delete estudio' });
+    return
   }
 };

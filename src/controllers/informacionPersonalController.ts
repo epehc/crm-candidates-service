@@ -117,14 +117,17 @@ export const getAllInformacionesPersonales = async (req: Request, res: Response)
   if (!errors.isEmpty()) {
     logger.error('Error al cargar informaciones personales: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const informacionesPersonales = await InformacionPersonal.findAll();
     logger.info("Informaciones personales cargadas")
     res.status(200).json(informacionesPersonales);
+    return
   } catch (error) {
     logger.error('Error al cargar informaciones personales: ', error);
     res.status(500).json({ error: 'Failed to fetch informaciones personales' });
+    return
   }
 };
 
@@ -158,6 +161,7 @@ export const getInformacionPersonalByCandidatoId = async (req: Request, res: Res
   if (!errors.isEmpty()) {
     logger.error('Error al cargar informacion personal: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -165,13 +169,16 @@ export const getInformacionPersonalByCandidatoId = async (req: Request, res: Res
     if (informacionPersonal) {
       logger.info(`Informacion personal con candidato_id: ${candidato_id} cargada.`)
       res.status(200).json(informacionPersonal);
+      return
     } else {
         logger.error(`Informacion personal con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Informacion personal not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar informacion personal: ', error);
     res.status(500).json({ error: 'Failed to fetch informacion personal' });
+    return
   }
 };
 
@@ -204,14 +211,17 @@ export const createInformacionPersonal = async (req: Request, res: Response): Pr
   if (!errors.isEmpty()) {
     logger.error('Error al crear informacion personal: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const informacionPersonal = await InformacionPersonal.create(req.body);
     logger.info("Informacion personal creada")
     res.status(201).json(informacionPersonal);
+    return
   } catch (error) {
     logger.error('Error al crear informacion personal: ', error);
     res.status(500).json({ error: 'Failed to create informacion personal' });
+    return
   }
 };
 
@@ -251,8 +261,9 @@ export const createInformacionPersonal = async (req: Request, res: Response): Pr
 export const updateInformacionPersonal = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    logger.error('Error al actualizar informacion personal: ', errors);
+      logger.error('Error al actualizar informacion personal: '+ JSON.stringify(errors.array()));
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id  = req.params.candidato_id;
@@ -261,13 +272,16 @@ export const updateInformacionPersonal = async (req: Request, res: Response) => 
       const updatedInformacionPersonal = await InformacionPersonal.findByPk(candidato_id);
         logger.info("Informacion personal actualizada")
       res.status(200).json(updatedInformacionPersonal);
+      return
     } else {
-        logger.error(`Informacion personal con candidato_id: ${candidato_id} no encontrada.`)
+      logger.error(`Informacion personal con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Informacion personal not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar informacion personal: ', error);
     res.status(500).json({ error: 'Failed to update informacion personal' });
+    return
   }
 };
 
@@ -297,6 +311,7 @@ export const deleteInformacionPersonal = async (req: Request, res: Response) => 
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar informacion personal: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -304,12 +319,15 @@ export const deleteInformacionPersonal = async (req: Request, res: Response) => 
     if (deleted) {
         logger.info(`Informacion personal con candidato_id: ${candidato_id} eliminada.`)
       res.status(204).send();
+      return
     } else {
         logger.error(`Informacion personal con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Informacion personal not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar informacion personal: ', error);
     res.status(500).json({ error: 'Failed to delete informacion personal' });
+    return
   }
 };

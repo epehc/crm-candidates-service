@@ -83,14 +83,17 @@ export const getAllMobilidades = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al cargar mobilidades: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const mobilidades = await Mobilidad.findAll();
     logger.info("Mobilidades cargadas")
     res.status(200).json(mobilidades);
+    return
   } catch (error) {
     logger.error('Error al cargar mobilidades: ', error);
     res.status(500).json({ error: 'Failed to fetch mobilidades' });
+    return
   }
 };
 
@@ -124,6 +127,7 @@ export const getMobilidadByCandidatoId = async (req: Request, res: Response) => 
   if (!errors.isEmpty()) {
     logger.error('Error al cargar mobilidad: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id = req.params.candidato_id;
@@ -131,13 +135,16 @@ export const getMobilidadByCandidatoId = async (req: Request, res: Response) => 
     if (mobilidad) {
         logger.info(`Mobilidad con candidato_id: ${candidato_id} cargado.`)
       res.status(200).json(mobilidad);
+      return
     } else {
         logger.error(`Mobilidad con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Mobilidad not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al cargar mobilidad: ', error);
     res.status(500).json({ error: 'Failed to fetch mobilidad' });
+    return
   }
 };
 
@@ -170,14 +177,17 @@ export const createMobilidad = async (req: Request, res: Response): Promise<void
   if (!errors.isEmpty()) {
     logger.error('Error al crear mobilidad: ', errors);
     res.status(400).json({ errors: errors.array() });
+    return
   }
   try {
     const mobilidad = await Mobilidad.create(req.body);
     logger.info("Mobilidad creada")
     res.status(201).json(mobilidad);
+    return
   } catch (error) {
     logger.error('Error al crear mobilidad: ', error);
     res.status(500).json({ error: 'Failed to create mobilidad' });
+    return
   }
 };
 
@@ -219,6 +229,7 @@ export const updateMobilidad = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al actualizar mobilidad: ', errors);
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id  = req.params.candidato_id;
@@ -227,13 +238,16 @@ export const updateMobilidad = async (req: Request, res: Response) => {
       const updatedMobilidad = await Mobilidad.findByPk(candidato_id);
         logger.info("Mobilidad actualizada")
       res.status(200).json(updatedMobilidad);
+      return
     } else {
         logger.error(`Mobilidad con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Mobilidad not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al actualizar mobilidad: ', error);
     res.status(500).json({ error: 'Failed to update mobilidad' });
+    return
   }
 };
 
@@ -263,6 +277,7 @@ export const deleteMobilidad = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     logger.error('Error al eliminar mobilidad: ', errors)
       res.status(400).json({ errors: errors.array() });
+      return
   }
   try {
     const candidato_id  = req.params.candidato_id;
@@ -270,12 +285,15 @@ export const deleteMobilidad = async (req: Request, res: Response) => {
     if (deleted) {
         logger.info(`Mobilidad con candidato_id: ${candidato_id} eliminada.`)
       res.status(204).send();
+      return
     } else {
         logger.error(`Mobilidad con candidato_id: ${candidato_id} no encontrada.`)
       res.status(404).json({ error: 'Mobilidad not found' });
+      return
     }
   } catch (error) {
     logger.error('Error al eliminar mobilidad: ', error);
     res.status(500).json({ error: 'Failed to delete mobilidad' });
+    return
   }
 };
