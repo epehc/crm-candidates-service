@@ -1,8 +1,6 @@
 import express from 'express';
 import { body, param } from 'express-validator';
 import {
-    getCandidatoByEmail,
-    getCandidatoByDPI,
     createCandidato,
     updateCandidato,
     deleteCandidato,
@@ -74,66 +72,6 @@ router.get('/:candidato_id',
     authenticateJWT,
     authorize([UserRole.Admin, UserRole.Reclutador]),
     getCandidatoByCandidatoId);
-
-/**
- * @swagger
- * /candidatos/email/{email}:
- *   get:
- *     summary: Get a candidato by email
- *     tags: [Candidatos]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The candidato email
- *     responses:
- *       200:
- *         description: The candidato description by email
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Candidato'
- *       404:
- *         description: Candidato not found
- *       500:
- *         description: Failed to fetch candidato
- */
-router.get('/email/:email',
-    authenticateJWT,
-    authorize([UserRole.Admin, UserRole.Reclutador]),
-    getCandidatoByEmail);
-
-/**
- * @swagger
- * /candidatos/dpi/{dpi}:
- *   get:
- *     summary: Get a candidato by DPI
- *     tags: [Candidatos]
- *     parameters:
- *       - in: path
- *         name: dpi
- *         schema:
- *           type: string
- *         required: true
- *         description: The candidato DPI
- *     responses:
- *       200:
- *         description: The candidato description by DPI
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Candidato'
- *       404:
- *         description: Candidato not found
- *       500:
- *         description: Failed to fetch candidato
- */
-router.get('/dpi/:dpi',
-    authenticateJWT,
-    authorize([UserRole.Admin, UserRole.Reclutador]),
-    getCandidatoByDPI);
 
 /**
  * @swagger
@@ -221,6 +159,7 @@ router.put(
     body('telefono').optional().isString().notEmpty().withMessage('Telefono es requerido'),
     body('correo').optional().isEmail().notEmpty().withMessage('Correo es requerido'),
     body('aspiracion_salarial').optional().isString().notEmpty().withMessage('Aspiracion salarial es requerido'),
+    body('comentarios').optional().isString().notEmpty().withMessage('Aspiracion salarial es requerido'),
     ],
     updateCandidato
 );

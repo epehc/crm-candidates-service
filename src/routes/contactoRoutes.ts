@@ -133,12 +133,12 @@ router.post(
     authenticateJWT,
     authorize([UserRole.Admin]),
     [
-      body('id').isUUID(),
-      body('candidato_id').isUUID(),
-      body('parentezco').isString(),
-      body('nombre').isString().notEmpty().withMessage('Nombre es requerido'),
-      body('trabajo').isString().notEmpty().withMessage('Trabajo es requerido'),
-      body('telefono').isString().notEmpty().withMessage('Telefono es requerido'),
+        body('id').isUUID(),
+        body('candidato_id').isUUID(),
+        body('parentezco').isString(),
+        body('nombre').isString().notEmpty().withMessage('Nombre es requerido'),
+        body('trabajo').isString().notEmpty().withMessage('Trabajo es requerido'),
+        body('telefono').isString().notEmpty().withMessage('Telefono es requerido'),
     ],
     createContacto
 );
