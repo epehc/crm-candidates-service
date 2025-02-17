@@ -23,9 +23,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Configure NPM authentication
+        run: |
+          echo "@epehc:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Install dependencies
         run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Tests
         run: npm test
