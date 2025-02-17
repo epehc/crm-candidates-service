@@ -2,6 +2,10 @@ name: Run Tests
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+  packages: read  #  This grants GitHub Actions permission to read private packages
+
 jobs:
   test:
     runs-on: ubuntu-latest
