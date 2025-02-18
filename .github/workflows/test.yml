@@ -49,4 +49,4 @@ jobs:
           npx tsc --noEmit
 
       - name: Run Tests
-        run: npm test
+        run: npm test:all
