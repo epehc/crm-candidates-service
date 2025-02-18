@@ -42,5 +42,11 @@ jobs:
       - name: Install TypeScript
         run: npm install -g typescript
 
+      - name: Clean and Rebuild
+        run: |
+          rm -rf node_modules
+          npm install
+          npx tsc --noEmit
+
       - name: Run Tests
         run: npm test
