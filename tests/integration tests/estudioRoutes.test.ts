@@ -1,9 +1,10 @@
-jest.mock('@epehc/sharedutilities/middlewares/authMiddleware', () => ({
+jest.mock('../../node_modules/@epehc/sharedutilities/middlewares/authMiddleware', () => ({
   authenticateJWT: (req: any, res: any, next: any) => next()
 }));
-jest.mock('@epehc/sharedutilities/middlewares/authorize', () => ({
+jest.mock('../../node_modules/@epehc/sharedutilities/middlewares/authorize', () => ({
   authorize: () => (req: any, res: any, next: any) => next()
 }));
+
 
 import * as estudioController from "../../src/controllers/estudioController";
 
@@ -20,7 +21,7 @@ jest
       res.status(404).json({ error: "Estudios not found" });
     }
   });
-  
+
 import request from "supertest";
 import express from "express";
 import estudioRoutes from "../../src/routes/estudioRoutes";

@@ -1,9 +1,10 @@
-jest.mock('@epehc/sharedutilities/middlewares/authMiddleware', () => ({
+jest.mock('../../node_modules/@epehc/sharedutilities/middlewares/authMiddleware', () => ({
   authenticateJWT: (req: any, res: any, next: any) => next()
 }));
-jest.mock('@epehc/sharedutilities/middlewares/authorize', () => ({
+jest.mock('../../node_modules/@epehc/sharedutilities/middlewares/authorize', () => ({
   authorize: () => (req: any, res: any, next: any) => next()
 }));
+
 
 import * as mobilidadController from "../../src/controllers/mobilidadController";
 
