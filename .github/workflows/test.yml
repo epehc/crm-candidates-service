@@ -39,5 +39,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 
+      - name: Install TypeScript
+        run: npm install -g typescript
+
       - name: Run Tests
         run: npm test
