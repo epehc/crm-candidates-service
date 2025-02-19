@@ -35,7 +35,7 @@ app.use("/mobilidades", mobilidadRoutes);
 app.use("/residencias", residenciaRoutes);
 app.use("/vicios", viciosRoutes)
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8080;
 
 /**
  * Connects to the database and starts the server.
