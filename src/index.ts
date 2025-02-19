@@ -37,15 +37,17 @@ app.use("/vicios", viciosRoutes)
 
 const PORT = process.env.PORT || 8080;
 
-/**
- * Connects to the database and starts the server.
- */
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+// Connect to the database in the background
 sequelize
     .sync()
     .then(() => {
         console.log("Database connected!");
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
     })
-    .catch((err) => console.error("Failed to connect to database:", err));
+    .catch((err) => {
+        console.error("Failed to connect to database:", err);
+        server.close(); // Stop the server if the DB fails
+    });
