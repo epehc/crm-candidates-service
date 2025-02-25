@@ -98,7 +98,9 @@ The application uses the following environment variables:
 - `npm run dev`: Run the application in development mode
 - `npm run build`: Build the application
 - `npm start`: Run the application in production mode
-- `npm test`: Run tests
+- `npm run test:unit`: Run unit tests
+- `npm run test:integration`: Run integration tests
+- `npm run test:all`: Run all tests
 
 ## Project Structure
 
@@ -123,5 +125,5 @@ crm-candidates-service/
 To run tests, use the following command:
 
 ```sh
-npm test
+npm run test:all
 ```
