@@ -86,7 +86,7 @@ InformacionPersonal.init(
             allowNull: true,
         },
         software: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         partido_politico: {
@@ -98,7 +98,7 @@ InformacionPersonal.init(
             allowNull: false,
         },
         adjetivos: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         impedimento_fisico: {
@@ -114,7 +114,7 @@ InformacionPersonal.init(
             allowNull: false,
         },
         estudios_adicionales: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: true,
         },
         idiomas: {

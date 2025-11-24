@@ -21,7 +21,7 @@ dotenv.config();
 const sequelize = process.env.DATABASE_URL
 ? new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
-    logging: false, // Disable logging in production
+    logging: true, // Disable logging in production
 })
 : new Sequelize(
     process.env.DB_NAME!,
@@ -35,7 +35,7 @@ const sequelize = process.env.DATABASE_URL
 );
 
 //To force the database to sync with the models every time the server starts, uncomment the following code
-/* const syncDB = async () => {
+const syncDB = async () => {
     try {
         await sequelize.authenticate();
         console.log("Database connected");
@@ -47,7 +47,7 @@ const sequelize = process.env.DATABASE_URL
     }
 };
 
-syncDB();
- */
+//syncDB();
+
 
 export default sequelize;

@@ -66,7 +66,7 @@ ExperienciaLaboral.init(
             allowNull: false,
         },
         puesto: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         fecha_inicio: {
@@ -94,11 +94,11 @@ ExperienciaLaboral.init(
             allowNull: true,
         },
         motivo_salida: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: true,
         },
         responsabilidades: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: true,
         },
         salario: {
